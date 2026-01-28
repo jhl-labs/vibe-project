@@ -1,0 +1,76 @@
+{
+  // 권장 확장 프로그램
+  // VS Code 시작 시 설치 권장 팝업이 표시됩니다
+  "recommendations": [
+    // === AI Assistants ===
+    // Claude를 사용하는 경우 (선택)
+    // "anthropic.claude-code",
+
+    // GitHub Copilot (선택)
+    // "github.copilot",
+    // "github.copilot-chat",
+
+    // === Code Quality ===
+    // ESLint - JavaScript/TypeScript 린팅
+    "dbaeumer.vscode-eslint",
+
+    // Prettier - 코드 포매팅
+    "esbenp.prettier-vscode",
+
+    // EditorConfig - 에디터 설정 통일
+    "editorconfig.editorconfig",
+
+    // === Git ===
+    // GitLens - Git 기능 강화
+    "eamodio.gitlens",
+
+    // Conventional Commits - 커밋 메시지 도우미
+    "vivaxy.vscode-conventional-commits",
+
+    // === Languages ===
+    // Python
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "charliermarsh.ruff",
+
+    // TypeScript/JavaScript (내장 + 추가)
+    "ms-vscode.vscode-typescript-next",
+
+    // Prisma (TypeScript ORM)
+    "prisma.prisma",
+
+    // === Documentation ===
+    // Markdown
+    "yzhang.markdown-all-in-one",
+    "davidanson.vscode-markdownlint",
+
+    // YAML
+    "redhat.vscode-yaml",
+
+    // === Testing ===
+    // Jest Runner
+    "firsttris.vscode-jest-runner",
+
+    // Python Test Explorer
+    "littlefoxteam.vscode-python-test-adapter",
+
+    // === Utilities ===
+    // Error Lens - 인라인 에러 표시
+    "usernamehw.errorlens",
+
+    // Todo Tree - TODO 주석 관리
+    "gruntfuggly.todo-tree",
+
+    // Path Intellisense - 경로 자동완성
+    "christian-kohler.path-intellisense",
+
+    // dotenv - .env 파일 지원
+    "mikestead.dotenv",
+
+    // REST Client - API 테스트
+    "humao.rest-client"
+  ],
+
+  // 권장하지 않는 확장 (충돌 가능성)
+  "unwantedRecommendations": []
+}

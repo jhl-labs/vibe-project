@@ -1,0 +1,344 @@
+{
+  // ===================================
+  // AI Agent Prompts
+  // ===================================
+  "AI: Claude Instruction": {
+    "prefix": "ai-claude",
+    "body": [
+      "// AI: ${1:instruction}",
+      "// Context: ${2:relevant context}",
+      "// Expected: ${3:expected outcome}",
+      "$0"
+    ],
+    "description": "AI 지시 주석 추가"
+  },
+  "AI: TODO for Agent": {
+    "prefix": "ai-todo",
+    "body": [
+      "// TODO(AI): ${1:task description}",
+      "// Priority: ${2|high,medium,low|}",
+      "// Notes: ${3:additional context}",
+      "$0"
+    ],
+    "description": "AI Agent를 위한 TODO"
+  },
+  "AI: Review Request": {
+    "prefix": "ai-review",
+    "body": [
+      "// REVIEW: ${1:What needs review}",
+      "// Concerns: ${2:specific concerns}",
+      "$0"
+    ],
+    "description": "AI 리뷰 요청"
+  },
+
+  // ===================================
+  // TypeScript Patterns
+  // ===================================
+  "TS: Clean Architecture Entity": {
+    "prefix": "entity",
+    "body": [
+      "export interface ${1:Entity}Props {",
+      "  id: string;",
+      "  ${2:property}: ${3:type};",
+      "  createdAt: Date;",
+      "  updatedAt: Date;",
+      "}",
+      "",
+      "export class ${1:Entity} {",
+      "  private constructor(private readonly props: ${1:Entity}Props) {}",
+      "",
+      "  static create(props: Omit<${1:Entity}Props, 'id' | 'createdAt' | 'updatedAt'>): ${1:Entity} {",
+      "    return new ${1:Entity}({",
+      "      ...props,",
+      "      id: crypto.randomUUID(),",
+      "      createdAt: new Date(),",
+      "      updatedAt: new Date(),",
+      "    });",
+      "  }",
+      "",
+      "  get id(): string { return this.props.id; }",
+      "  get ${2:property}(): ${3:type} { return this.props.${2:property}; }",
+      "  get createdAt(): Date { return this.props.createdAt; }",
+      "  get updatedAt(): Date { return this.props.updatedAt; }",
+      "",
+      "  $0",
+      "}"
+    ],
+    "description": "Clean Architecture Entity"
+  },
+  "TS: Repository Interface": {
+    "prefix": "repository",
+    "body": [
+      "export interface ${1:Entity}Repository {",
+      "  findById(id: string): Promise<${1:Entity} | null>;",
+      "  findAll(): Promise<${1:Entity}[]>;",
+      "  save(entity: ${1:Entity}): Promise<${1:Entity}>;",
+      "  delete(id: string): Promise<void>;",
+      "  $0",
+      "}"
+    ],
+    "description": "Repository Interface"
+  },
+  "TS: Use Case": {
+    "prefix": "usecase",
+    "body": [
+      "export interface ${1:UseCaseName}Input {",
+      "  ${2:inputField}: ${3:type};",
+      "}",
+      "",
+      "export interface ${1:UseCaseName}Output {",
+      "  ${4:outputField}: ${5:type};",
+      "}",
+      "",
+      "export class ${1:UseCaseName} {",
+      "  constructor(",
+      "    private readonly ${6:repository}: ${7:RepositoryType},",
+      "  ) {}",
+      "",
+      "  async execute(input: ${1:UseCaseName}Input): Promise<${1:UseCaseName}Output> {",
+      "    $0",
+      "  }",
+      "}"
+    ],
+    "description": "Use Case Pattern"
+  },
+  "TS: Error Class": {
+    "prefix": "error-class",
+    "body": [
+      "export class ${1:ErrorName}Error extends Error {",
+      "  constructor(${2:param}: ${3:type}) {",
+      "    super(`${4:Error message}: \\${${2:param}}`);",
+      "    this.name = '${1:ErrorName}Error';",
+      "  }",
+      "}"
+    ],
+    "description": "Custom Error Class"
+  },
+
+  // ===================================
+  // Python Patterns
+  // ===================================
+  "PY: Clean Architecture Entity": {
+    "prefix": "py-entity",
+    "body": [
+      "from dataclasses import dataclass, field",
+      "from datetime import datetime",
+      "from uuid import uuid4",
+      "",
+      "",
+      "@dataclass",
+      "class ${1:Entity}:",
+      "    \"\"\"${2:Entity description}.\"\"\"",
+      "",
+      "    id: str = field(default_factory=lambda: str(uuid4()))",
+      "    ${3:property}: ${4:str}",
+      "    created_at: datetime = field(default_factory=datetime.now)",
+      "    updated_at: datetime = field(default_factory=datetime.now)",
+      "",
+      "    @classmethod",
+      "    def create(cls, ${3:property}: ${4:str}) -> \"${1:Entity}\":",
+      "        \"\"\"Create a new ${1:Entity}.\"\"\"",
+      "        return cls(${3:property}=${3:property})",
+      "",
+      "    $0"
+    ],
+    "description": "Python Entity with dataclass"
+  },
+  "PY: Repository Protocol": {
+    "prefix": "py-repository",
+    "body": [
+      "from typing import Protocol",
+      "",
+      "",
+      "class ${1:Entity}Repository(Protocol):",
+      "    \"\"\"${1:Entity} repository interface.\"\"\"",
+      "",
+      "    async def find_by_id(self, id: str) -> ${1:Entity} | None:",
+      "        \"\"\"Find ${1:Entity} by ID.\"\"\"",
+      "        ...",
+      "",
+      "    async def find_all(self) -> list[${1:Entity}]:",
+      "        \"\"\"Find all ${1:Entity}s.\"\"\"",
+      "        ...",
+      "",
+      "    async def save(self, entity: ${1:Entity}) -> ${1:Entity}:",
+      "        \"\"\"Save ${1:Entity}.\"\"\"",
+      "        ...",
+      "",
+      "    async def delete(self, id: str) -> None:",
+      "        \"\"\"Delete ${1:Entity}.\"\"\"",
+      "        ...",
+      "",
+      "    $0"
+    ],
+    "description": "Python Repository Protocol"
+  },
+  "PY: Use Case": {
+    "prefix": "py-usecase",
+    "body": [
+      "from dataclasses import dataclass",
+      "",
+      "",
+      "@dataclass",
+      "class ${1:UseCaseName}Input:",
+      "    \"\"\"Input for ${1:UseCaseName}.\"\"\"",
+      "",
+      "    ${2:field}: ${3:str}",
+      "",
+      "",
+      "@dataclass",
+      "class ${1:UseCaseName}Output:",
+      "    \"\"\"Output for ${1:UseCaseName}.\"\"\"",
+      "",
+      "    ${4:field}: ${5:str}",
+      "",
+      "",
+      "class ${1:UseCaseName}:",
+      "    \"\"\"${6:Use case description}.\"\"\"",
+      "",
+      "    def __init__(self, ${7:repository}: ${8:RepositoryType}) -> None:",
+      "        self._${7:repository} = ${7:repository}",
+      "",
+      "    async def execute(self, input: ${1:UseCaseName}Input) -> ${1:UseCaseName}Output:",
+      "        \"\"\"Execute the use case.\"\"\"",
+      "        $0"
+    ],
+    "description": "Python Use Case Pattern"
+  },
+  "PY: FastAPI Router": {
+    "prefix": "py-router",
+    "body": [
+      "from fastapi import APIRouter, Depends, HTTPException, status",
+      "",
+      "router = APIRouter(prefix=\"/${1:resource}\", tags=[\"${2:Tag}\"])",
+      "",
+      "",
+      "@router.get(\"/\")",
+      "async def list_${1:resource}():",
+      "    \"\"\"List all ${1:resource}.\"\"\"",
+      "    $0",
+      "",
+      "",
+      "@router.get(\"/{id}\")",
+      "async def get_${1:resource}(id: str):",
+      "    \"\"\"Get ${1:resource} by ID.\"\"\"",
+      "    pass",
+      "",
+      "",
+      "@router.post(\"/\", status_code=status.HTTP_201_CREATED)",
+      "async def create_${1:resource}():",
+      "    \"\"\"Create new ${1:resource}.\"\"\"",
+      "    pass"
+    ],
+    "description": "FastAPI Router"
+  },
+
+  // ===================================
+  // Test Patterns
+  // ===================================
+  "TS: Jest Test Suite": {
+    "prefix": "test-suite",
+    "body": [
+      "describe('${1:Subject}', () => {",
+      "  beforeEach(() => {",
+      "    $2",
+      "  });",
+      "",
+      "  describe('${3:method}', () => {",
+      "    it('should ${4:expected behavior}', () => {",
+      "      // Arrange",
+      "      $5",
+      "",
+      "      // Act",
+      "      $6",
+      "",
+      "      // Assert",
+      "      $0",
+      "    });",
+      "  });",
+      "});"
+    ],
+    "description": "Jest Test Suite"
+  },
+  "PY: Pytest Test": {
+    "prefix": "py-test",
+    "body": [
+      "import pytest",
+      "",
+      "",
+      "class Test${1:Subject}:",
+      "    \"\"\"Tests for ${1:Subject}.\"\"\"",
+      "",
+      "    def test_${2:scenario}(self) -> None:",
+      "        \"\"\"Should ${3:expected behavior}.\"\"\"",
+      "        # Arrange",
+      "        $4",
+      "",
+      "        # Act",
+      "        $5",
+      "",
+      "        # Assert",
+      "        $0"
+    ],
+    "description": "Pytest Test Class"
+  },
+
+  // ===================================
+  // Documentation
+  // ===================================
+  "MD: ADR Template": {
+    "prefix": "adr",
+    "body": [
+      "# ADR-${1:number}: ${2:Title}",
+      "",
+      "## Status",
+      "",
+      "${3|Proposed,Accepted,Deprecated,Superseded|}",
+      "",
+      "## Context",
+      "",
+      "${4:What is the issue that we're seeing that is motivating this decision?}",
+      "",
+      "## Decision",
+      "",
+      "${5:What is the change that we're proposing?}",
+      "",
+      "## Consequences",
+      "",
+      "${6:What becomes easier or harder as a result of this change?}",
+      "",
+      "$0"
+    ],
+    "description": "Architecture Decision Record"
+  },
+  "MD: API Endpoint Doc": {
+    "prefix": "api-doc",
+    "body": [
+      "### ${1:Endpoint Name}",
+      "",
+      "**${2|GET,POST,PUT,PATCH,DELETE|}** `${3:/api/v1/resource}`",
+      "",
+      "${4:Description of what this endpoint does.}",
+      "",
+      "#### Request",
+      "",
+      "```json",
+      "{",
+      "  \"${5:field}\": \"${6:value}\"",
+      "}",
+      "```",
+      "",
+      "#### Response",
+      "",
+      "```json",
+      "{",
+      "  \"${7:field}\": \"${8:value}\"",
+      "}",
+      "```",
+      "",
+      "$0"
+    ],
+    "description": "API Endpoint Documentation"
+  }
+}

@@ -1,0 +1,232 @@
+{
+  // ===================================
+  // Editor Settings
+  // ===================================
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "editor.rulers": [80, 120],
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+  "editor.linkedEditing": true,
+  "editor.suggest.preview": true,
+  "editor.inlineSuggest.enabled": true,
+
+  // ===================================
+  // File Settings
+  // ===================================
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/*.pyc": true,
+    "**/.venv": true,
+    "**/venv": true,
+    "**/.mypy_cache": true,
+    "**/.ruff_cache": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.next": true,
+    "**/coverage": true
+  },
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.git/objects/**": true,
+    "**/.venv/**": true
+  },
+  "files.associations": {
+    "*.css": "css",
+    ".env*": "dotenv",
+    "*.prisma": "prisma"
+  },
+
+  // ===================================
+  // Search Settings
+  // ===================================
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/coverage": true,
+    "**/.venv": true,
+    "**/package-lock.json": true,
+    "**/pnpm-lock.yaml": true,
+    "**/yarn.lock": true
+  },
+
+  // ===================================
+  // Terminal Settings
+  // ===================================
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.scrollback": 10000,
+
+  // ===================================
+  // Git Settings
+  // ===================================
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "git.inputValidation": true,
+  "git.inputValidationSubjectLength": 72,
+
+  // ===================================
+  // TypeScript/JavaScript
+  // ===================================
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.suggest.autoImports": true,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // ===================================
+  // Python
+  // ===================================
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    },
+    "editor.tabSize": 4
+  },
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.autoImportCompletions": true,
+
+  // ===================================
+  // JSON
+  // ===================================
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // ===================================
+  // Markdown
+  // ===================================
+  "[markdown]": {
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one",
+    "editor.wordWrap": "on",
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": false
+    }
+  },
+  "markdownlint.config": {
+    "MD033": false,
+    "MD041": false
+  },
+
+  // ===================================
+  // YAML
+  // ===================================
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+    "editor.tabSize": 2
+  },
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml"
+  },
+
+  // ===================================
+  // ESLint
+  // ===================================
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.workingDirectories": [{ "mode": "auto" }],
+
+  // ===================================
+  // Prettier
+  // ===================================
+  "prettier.requireConfig": true,
+  "prettier.useEditorConfig": true,
+
+  // ===================================
+  // Error Lens
+  // ===================================
+  "errorLens.enabledDiagnosticLevels": ["error", "warning"],
+  "errorLens.excludeBySource": ["ts(80001)"],
+
+  // ===================================
+  // Todo Tree
+  // ===================================
+  "todo-tree.general.tags": [
+    "TODO",
+    "FIXME",
+    "BUG",
+    "HACK",
+    "NOTE",
+    "XXX",
+    "[ ]",
+    "[x]"
+  ],
+  "todo-tree.highlights.defaultHighlight": {
+    "icon": "alert",
+    "type": "text",
+    "foreground": "#FF8C00",
+    "background": "#2D2D2D",
+    "opacity": 50,
+    "iconColour": "#FF8C00"
+  },
+  "todo-tree.highlights.customHighlight": {
+    "FIXME": {
+      "icon": "flame",
+      "foreground": "#FF2D00",
+      "iconColour": "#FF2D00"
+    },
+    "BUG": {
+      "icon": "bug",
+      "foreground": "#FF2D00",
+      "iconColour": "#FF2D00"
+    }
+  },
+
+  // ===================================
+  // AI Assistant Settings (Cursor/Copilot)
+  // ===================================
+  // Cursor AI 사용 시 아래 설정 활성화
+  // "cursor.cpp.disabledLanguages": [],
+  // "cursor.chat.alwaysSearchWeb": false,
+
+  // GitHub Copilot 사용 시 아래 설정 활성화
+  // "github.copilot.enable": {
+  //   "*": true,
+  //   "plaintext": false,
+  //   "markdown": true,
+  //   "yaml": true
+  // },
+
+  // ===================================
+  // Workspace Trust
+  // ===================================
+  "security.workspace.trust.untrustedFiles": "prompt"
+}

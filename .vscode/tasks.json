@@ -1,0 +1,191 @@
+{
+  // 작업 설정
+  // Ctrl+Shift+B (빌드) 또는 Ctrl+Shift+P > Tasks: Run Task
+  "version": "2.0.0",
+  "tasks": [
+    // ===================================
+    // Common Tasks
+    // ===================================
+    {
+      "label": "Install Dependencies",
+      "type": "shell",
+      "command": "npm install || pip install -r requirements.txt",
+      "problemMatcher": [],
+      "group": "build"
+    },
+
+    // ===================================
+    // TypeScript/Node.js Tasks
+    // ===================================
+    {
+      "label": "npm: build",
+      "type": "npm",
+      "script": "build",
+      "problemMatcher": ["$tsc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "npm: dev",
+      "type": "npm",
+      "script": "dev",
+      "problemMatcher": [],
+      "isBackground": true,
+      "group": "build"
+    },
+    {
+      "label": "npm: test",
+      "type": "npm",
+      "script": "test",
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "npm: lint",
+      "type": "npm",
+      "script": "lint",
+      "problemMatcher": ["$eslint-stylish"],
+      "group": "build"
+    },
+    {
+      "label": "npm: lint:fix",
+      "type": "npm",
+      "script": "lint:fix",
+      "problemMatcher": ["$eslint-stylish"],
+      "group": "build"
+    },
+    {
+      "label": "npm: type-check",
+      "type": "npm",
+      "script": "type-check",
+      "problemMatcher": ["$tsc"],
+      "group": "build"
+    },
+
+    // ===================================
+    // Python Tasks
+    // ===================================
+    {
+      "label": "Python: Run Server",
+      "type": "shell",
+      "command": "uvicorn app.main:app --reload",
+      "problemMatcher": [],
+      "isBackground": true,
+      "group": "build"
+    },
+    {
+      "label": "Python: Test",
+      "type": "shell",
+      "command": "pytest -v",
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Python: Test with Coverage",
+      "type": "shell",
+      "command": "pytest --cov=app --cov-report=html",
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Python: Lint (Ruff)",
+      "type": "shell",
+      "command": "ruff check .",
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Python: Format (Ruff)",
+      "type": "shell",
+      "command": "ruff format .",
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Python: Type Check (MyPy)",
+      "type": "shell",
+      "command": "mypy app",
+      "problemMatcher": [],
+      "group": "build"
+    },
+
+    // ===================================
+    // Git Tasks
+    // ===================================
+    {
+      "label": "Git: Status",
+      "type": "shell",
+      "command": "git status",
+      "problemMatcher": []
+    },
+    {
+      "label": "Git: Pull",
+      "type": "shell",
+      "command": "git pull",
+      "problemMatcher": []
+    },
+    {
+      "label": "Git: Fetch All",
+      "type": "shell",
+      "command": "git fetch --all --prune",
+      "problemMatcher": []
+    },
+
+    // ===================================
+    // Docker Tasks (if applicable)
+    // ===================================
+    {
+      "label": "Docker: Build",
+      "type": "shell",
+      "command": "docker compose build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker: Up",
+      "type": "shell",
+      "command": "docker compose up -d",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker: Down",
+      "type": "shell",
+      "command": "docker compose down",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker: Logs",
+      "type": "shell",
+      "command": "docker compose logs -f",
+      "problemMatcher": [],
+      "isBackground": true
+    },
+
+    // ===================================
+    // Database Tasks
+    // ===================================
+    {
+      "label": "Prisma: Generate",
+      "type": "shell",
+      "command": "npx prisma generate",
+      "problemMatcher": []
+    },
+    {
+      "label": "Prisma: Migrate Dev",
+      "type": "shell",
+      "command": "npx prisma migrate dev",
+      "problemMatcher": []
+    },
+    {
+      "label": "Prisma: Studio",
+      "type": "shell",
+      "command": "npx prisma studio",
+      "problemMatcher": [],
+      "isBackground": true
+    }
+  ]
+}

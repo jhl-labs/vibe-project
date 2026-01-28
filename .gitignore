@@ -21,7 +21,13 @@ Thumbs.db
 # Editor & IDE
 # -----------------
 .idea/
-.vscode/
+# .vscode/ - 템플릿 설정은 포함, 개인 설정 제외
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/snippets.code-snippets
 *.sublime-project
 *.sublime-workspace
 *.code-workspace
