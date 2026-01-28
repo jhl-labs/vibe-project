@@ -1,0 +1,163 @@
+# ===========================
+# Release Automation
+# ===========================
+# 이 워크플로우는 릴리스 프로세스를 자동화합니다.
+# Semantic Release 또는 수동 릴리스를 지원합니다.
+
+name: Release
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
+  workflow_dispatch:
+    inputs:
+      release-type:
+        description: "Release type"
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      dry-run:
+        description: "Dry run (no actual release)"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  # ===========================
+  # Semantic Release (자동)
+  # ===========================
+  semantic-release:
+    name: Semantic Release
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Node.js 기반 semantic-release 예시
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 20
+      #
+      # - name: Install dependencies
+      #   run: npm ci
+      #
+      # - name: Run semantic-release
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      #   run: npx semantic-release
+
+      - name: Placeholder
+        run: echo "Configure semantic-release for your project"
+
+  # ===========================
+  # Manual Release
+  # ===========================
+  manual-release:
+    name: Manual Release
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Get current version
+        id: current
+        run: |
+          CURRENT_VERSION=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "Current version: $CURRENT_VERSION"
+
+      - name: Calculate next version
+        id: next
+        run: |
+          CURRENT="${{ steps.current.outputs.version }}"
+          # Remove 'v' prefix if present
+          CURRENT=${CURRENT#v}
+
+          IFS='.' read -ra VERSION <<< "$CURRENT"
+          MAJOR=${VERSION[0]:-0}
+          MINOR=${VERSION[1]:-0}
+          PATCH=${VERSION[2]:-0}
+
+          case "${{ github.event.inputs.release-type }}" in
+            major)
+              MAJOR=$((MAJOR + 1))
+              MINOR=0
+              PATCH=0
+              ;;
+            minor)
+              MINOR=$((MINOR + 1))
+              PATCH=0
+              ;;
+            patch)
+              PATCH=$((PATCH + 1))
+              ;;
+          esac
+
+          NEXT_VERSION="v${MAJOR}.${MINOR}.${PATCH}"
+          echo "version=$NEXT_VERSION" >> $GITHUB_OUTPUT
+          echo "Next version: $NEXT_VERSION"
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          PREVIOUS_TAG="${{ steps.current.outputs.version }}"
+          if [[ "$PREVIOUS_TAG" == "v0.0.0" ]]; then
+            COMMITS=$(git log --pretty=format:"- %s (%h)" --no-merges)
+          else
+            COMMITS=$(git log ${PREVIOUS_TAG}..HEAD --pretty=format:"- %s (%h)" --no-merges)
+          fi
+
+          echo "commits<<EOF" >> $GITHUB_OUTPUT
+          echo "$COMMITS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        if: github.event.inputs.dry-run != 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${{ steps.next.outputs.version }}"
+          BODY="## What's Changed
+
+          ${{ steps.changelog.outputs.commits }}
+
+          **Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ steps.current.outputs.version }}...${VERSION}"
+
+          gh release create "$VERSION" \
+            --title "$VERSION" \
+            --notes "$BODY" \
+            --generate-notes
+
+      - name: Dry run summary
+        if: github.event.inputs.dry-run == 'true'
+        run: |
+          echo "## Dry Run Summary"
+          echo "Current version: ${{ steps.current.outputs.version }}"
+          echo "Next version: ${{ steps.next.outputs.version }}"
+          echo ""
+          echo "### Changelog"
+          echo "${{ steps.changelog.outputs.commits }}"

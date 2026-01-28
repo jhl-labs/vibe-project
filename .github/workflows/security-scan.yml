@@ -1,0 +1,187 @@
+# ===========================
+# Security Scanning
+# ===========================
+# 이 워크플로우는 보안 취약점을 스캔합니다.
+# - 의존성 취약점 검사
+# - 코드 보안 분석 (SAST)
+# - 시크릿 스캔
+# - 컨테이너 이미지 스캔
+
+name: Security Scan
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    # 매주 월요일 09:00 KST (00:00 UTC)
+    - cron: "0 0 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  # ===========================
+  # 의존성 취약점 검사
+  # ===========================
+  dependency-scan:
+    name: Dependency Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node.js 의존성 스캔
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 20
+      #
+      # - name: Run npm audit
+      #   run: npm audit --audit-level=high
+      #   continue-on-error: true
+
+      # Python 의존성 스캔
+      # - name: Setup Python
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: "3.12"
+      #
+      # - name: Run safety check
+      #   run: |
+      #     pip install safety
+      #     safety check -r requirements.txt
+      #   continue-on-error: true
+
+      # Trivy 의존성 스캔 (범용)
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "fs"
+          scan-ref: "."
+          format: "sarif"
+          output: "trivy-results.sarif"
+          severity: "CRITICAL,HIGH"
+        continue-on-error: true
+
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: "trivy-results.sarif"
+        continue-on-error: true
+
+  # ===========================
+  # 코드 보안 분석 (SAST)
+  # ===========================
+  code-scan:
+    name: Code Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # CodeQL 분석
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          # 지원 언어: javascript, python, java, go, ruby, csharp, cpp
+          languages: javascript
+          # queries: security-extended,security-and-quality
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:javascript"
+
+      # Semgrep 분석 (선택)
+      # - name: Run Semgrep
+      #   uses: returntocorp/semgrep-action@v1
+      #   with:
+      #     config: >-
+      #       p/security-audit
+      #       p/secrets
+      #       p/owasp-top-ten
+      #   continue-on-error: true
+
+  # ===========================
+  # 시크릿 스캔
+  # ===========================
+  secret-scan:
+    name: Secret Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Gitleaks 시크릿 스캔
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      # TruffleHog 시크릿 스캔 (선택)
+      # - name: Run TruffleHog
+      #   uses: trufflesecurity/trufflehog@main
+      #   with:
+      #     extra_args: --only-verified
+      #   continue-on-error: true
+
+  # ===========================
+  # 컨테이너 이미지 스캔 (선택)
+  # ===========================
+  # container-scan:
+  #   name: Container Scan
+  #   runs-on: ubuntu-latest
+  #   if: false  # Dockerfile이 있을 때 활성화
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #
+  #     - name: Build image
+  #       run: docker build -t app:scan .
+  #
+  #     - name: Run Trivy container scan
+  #       uses: aquasecurity/trivy-action@master
+  #       with:
+  #         image-ref: "app:scan"
+  #         format: "sarif"
+  #         output: "trivy-container.sarif"
+  #         severity: "CRITICAL,HIGH"
+  #
+  #     - name: Upload container scan results
+  #       uses: github/codeql-action/upload-sarif@v3
+  #       with:
+  #         sarif_file: "trivy-container.sarif"
+
+  # ===========================
+  # 보안 리포트
+  # ===========================
+  security-report:
+    name: Security Report
+    runs-on: ubuntu-latest
+    needs: [dependency-scan, code-scan, secret-scan]
+    if: always()
+    steps:
+      - name: Check scan results
+        run: |
+          echo "## Security Scan Summary"
+          echo ""
+          echo "| Scan | Status |"
+          echo "|------|--------|"
+          echo "| Dependency | ${{ needs.dependency-scan.result }} |"
+          echo "| Code | ${{ needs.code-scan.result }} |"
+          echo "| Secret | ${{ needs.secret-scan.result }} |"
+
+          if [[ "${{ needs.dependency-scan.result }}" == "failure" ]] || \
+             [[ "${{ needs.code-scan.result }}" == "failure" ]] || \
+             [[ "${{ needs.secret-scan.result }}" == "failure" ]]; then
+            echo ""
+            echo "::warning::Some security scans reported issues. Please review the Security tab."
+          fi

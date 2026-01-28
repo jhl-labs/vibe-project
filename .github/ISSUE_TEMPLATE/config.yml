@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://github.com/<your-org>/<your-project>/tree/main/docs
+    about: 문서를 확인해주세요
+  - name: Discussions
+    url: https://github.com/<your-org>/<your-project>/discussions
+    about: 질문이나 아이디어가 있으시면 Discussions를 이용해주세요
+  - name: Security Vulnerabilities
+    url: https://github.com/<your-org>/<your-project>/security/policy
+    about: 보안 취약점은 SECURITY.md를 참조하여 비공개로 보고해주세요

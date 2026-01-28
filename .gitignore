@@ -1,0 +1,190 @@
+# ===========================
+# Vibe Project Template
+# Universal .gitignore
+# ===========================
+
+# -----------------
+# OS Generated Files
+# -----------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# -----------------
+# Editor & IDE
+# -----------------
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+.project
+.classpath
+.settings/
+*.iml
+.factorypath
+
+# -----------------
+# Environment & Secrets
+# -----------------
+.env
+.env.*
+!.env.example
+!.env.template
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+secrets/
+.secrets
+credentials.json
+service-account*.json
+
+# -----------------
+# Dependencies
+# -----------------
+node_modules/
+vendor/
+bower_components/
+jspm_packages/
+.pnp/
+.pnp.js
+
+# -----------------
+# Build & Output
+# -----------------
+dist/
+build/
+out/
+target/
+*.egg-info/
+*.egg
+*.whl
+*.class
+*.jar
+*.war
+*.nar
+*.ear
+*.dll
+*.so
+*.dylib
+*.exe
+*.out
+*.app
+
+# -----------------
+# Package Manager
+# -----------------
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+composer.lock
+Gemfile.lock
+poetry.lock
+Pipfile.lock
+Cargo.lock
+
+# -----------------
+# Cache & Temp
+# -----------------
+.cache/
+.tmp/
+.temp/
+tmp/
+temp/
+*.log
+*.pid
+*.seed
+logs/
+*.bak
+*.backup
+
+# -----------------
+# Testing & Coverage
+# -----------------
+coverage/
+.coverage
+htmlcov/
+.nyc_output/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+*$py.class
+.tox/
+.nox/
+.hypothesis/
+junit.xml
+test-results/
+
+# -----------------
+# Documentation Build
+# -----------------
+site/
+_site/
+.docusaurus/
+.next/
+.nuxt/
+.output/
+.vercel/
+
+# -----------------
+# Language Specific
+# -----------------
+
+# Python
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-wheel-metadata/
+*.so
+.mypy_cache/
+.ruff_cache/
+
+# Node.js
+.npm/
+.eslintcache
+.stylelintcache
+
+# Java/Kotlin
+.gradle/
+.mvn/
+hs_err_pid*
+
+# Go
+*.exe~
+*.test
+*.prof
+
+# Rust
+debug/
+*.pdb
+
+# -----------------
+# Container & Deploy
+# -----------------
+.docker/
+docker-compose.override.yml
+
+# -----------------
+# Terraform & IaC
+# -----------------
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
+!*.tfvars.example
+
+# -----------------
+# AI Agent Context (Optional)
+# -----------------
+# .agent/cache/
+# .agent/tmp/

@@ -1,0 +1,206 @@
+# ===========================
+# CI Pipeline
+# ===========================
+# 이 워크플로우는 PR 및 main 브랜치 푸시 시 실행됩니다.
+# 프로젝트에 맞게 빌드, 테스트 단계를 커스터마이즈하세요.
+
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # 프로젝트별 환경 변수 설정
+  NODE_VERSION: "20"
+  # PYTHON_VERSION: "3.12"
+  # GO_VERSION: "1.22"
+
+jobs:
+  # ===========================
+  # 변경 감지
+  # ===========================
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      src: ${{ steps.filter.outputs.src }}
+      docs: ${{ steps.filter.outputs.docs }}
+      ci: ${{ steps.filter.outputs.ci }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            src:
+              - 'src/**'
+              - 'lib/**'
+              - 'package.json'
+              - 'requirements.txt'
+              - 'go.mod'
+            docs:
+              - 'docs/**'
+              - '*.md'
+            ci:
+              - '.github/workflows/**'
+
+  # ===========================
+  # 코드 품질 검사
+  # ===========================
+  lint:
+    name: Lint & Format
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.src == 'true' || needs.changes.outputs.ci == 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node.js 프로젝트 예시
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: ${{ env.NODE_VERSION }}
+      #     cache: 'npm'
+      #
+      # - name: Install dependencies
+      #   run: npm ci
+      #
+      # - name: Run linter
+      #   run: npm run lint
+      #
+      # - name: Check formatting
+      #   run: npm run format:check
+
+      # Python 프로젝트 예시
+      # - name: Setup Python
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: ${{ env.PYTHON_VERSION }}
+      #
+      # - name: Install dependencies
+      #   run: |
+      #     pip install ruff mypy
+      #     pip install -r requirements.txt
+      #
+      # - name: Run Ruff
+      #   run: ruff check .
+      #
+      # - name: Run type check
+      #   run: mypy .
+
+      - name: Placeholder
+        run: echo "Configure lint steps for your project"
+
+  # ===========================
+  # 빌드
+  # ===========================
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [changes, lint]
+    if: needs.changes.outputs.src == 'true' || needs.changes.outputs.ci == 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node.js 빌드 예시
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: ${{ env.NODE_VERSION }}
+      #     cache: 'npm'
+      #
+      # - name: Install dependencies
+      #   run: npm ci
+      #
+      # - name: Build
+      #   run: npm run build
+      #
+      # - name: Upload build artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: build
+      #     path: dist/
+      #     retention-days: 7
+
+      - name: Placeholder
+        run: echo "Configure build steps for your project"
+
+  # ===========================
+  # 테스트
+  # ===========================
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: [changes, lint]
+    if: needs.changes.outputs.src == 'true' || needs.changes.outputs.ci == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        # 여러 버전/환경 테스트 예시
+        # node-version: [18, 20, 22]
+        # os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - name: "Default"
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node.js 테스트 예시
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: ${{ env.NODE_VERSION }}
+      #     cache: 'npm'
+      #
+      # - name: Install dependencies
+      #   run: npm ci
+      #
+      # - name: Run tests
+      #   run: npm test
+      #
+      # - name: Upload coverage
+      #   uses: codecov/codecov-action@v4
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
+      #     fail_ci_if_error: false
+
+      - name: Placeholder
+        run: echo "Configure test steps for your project"
+
+  # ===========================
+  # E2E 테스트 (선택)
+  # ===========================
+  # e2e:
+  #   name: E2E Tests
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Run E2E tests
+  #       run: echo "Configure E2E tests"
+
+  # ===========================
+  # 최종 상태
+  # ===========================
+  ci-success:
+    name: CI Success
+    runs-on: ubuntu-latest
+    needs: [lint, build, test]
+    if: always()
+    steps:
+      - name: Check CI status
+        run: |
+          if [[ "${{ needs.lint.result }}" == "failure" ]] || \
+             [[ "${{ needs.build.result }}" == "failure" ]] || \
+             [[ "${{ needs.test.result }}" == "failure" ]]; then
+            echo "CI failed"
+            exit 1
+          fi
+          echo "CI passed successfully"

@@ -1,0 +1,96 @@
+# ===========================
+# Dependabot Configuration
+# ===========================
+# 자세한 정보: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Asia/Seoul"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    reviewers:
+      - "<your-org>/devops"
+    open-pull-requests-limit: 5
+
+  # npm (Node.js 프로젝트용 - 필요시 활성화)
+  # - package-ecosystem: "npm"
+  #   directory: "/"
+  #   schedule:
+  #     interval: "weekly"
+  #     day: "monday"
+  #     time: "09:00"
+  #     timezone: "Asia/Seoul"
+  #   commit-message:
+  #     prefix: "deps"
+  #     include: "scope"
+  #   labels:
+  #     - "dependencies"
+  #     - "npm"
+  #   reviewers:
+  #     - "<your-org>/maintainers"
+  #   open-pull-requests-limit: 10
+  #   groups:
+  #     development-dependencies:
+  #       patterns:
+  #         - "@types/*"
+  #         - "eslint*"
+  #         - "prettier*"
+  #         - "typescript"
+  #       update-types:
+  #         - "minor"
+  #         - "patch"
+  #     production-dependencies:
+  #       dependency-type: "production"
+  #       update-types:
+  #         - "patch"
+
+  # pip (Python 프로젝트용 - 필요시 활성화)
+  # - package-ecosystem: "pip"
+  #   directory: "/"
+  #   schedule:
+  #     interval: "weekly"
+  #     day: "monday"
+  #     time: "09:00"
+  #     timezone: "Asia/Seoul"
+  #   commit-message:
+  #     prefix: "deps"
+  #     include: "scope"
+  #   labels:
+  #     - "dependencies"
+  #     - "python"
+  #   reviewers:
+  #     - "<your-org>/maintainers"
+  #   open-pull-requests-limit: 10
+
+  # Docker (컨테이너 프로젝트용 - 필요시 활성화)
+  # - package-ecosystem: "docker"
+  #   directory: "/"
+  #   schedule:
+  #     interval: "weekly"
+  #   commit-message:
+  #     prefix: "docker"
+  #   labels:
+  #     - "dependencies"
+  #     - "docker"
+
+  # Terraform (IaC 프로젝트용 - 필요시 활성화)
+  # - package-ecosystem: "terraform"
+  #   directory: "/terraform"
+  #   schedule:
+  #     interval: "weekly"
+  #   commit-message:
+  #     prefix: "infra"
+  #   labels:
+  #     - "dependencies"
+  #     - "terraform"

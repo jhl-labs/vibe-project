@@ -1,0 +1,32 @@
+# ===========================
+# CODEOWNERS
+# ===========================
+# 이 파일은 코드 리뷰어를 자동으로 할당합니다.
+# 자세한 정보: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# 기본 소유자 - 모든 PR에 대해 리뷰 요청
+* @<your-org>/maintainers
+
+# GitHub 설정
+.github/ @<your-org>/devops
+
+# CI/CD 파이프라인
+.github/workflows/ @<your-org>/devops @<your-org>/maintainers
+
+# AI 에이전트 설정
+.agent/ @<your-org>/ai-team
+CLAUDE.md @<your-org>/ai-team
+.cursorrules @<your-org>/ai-team
+.roo/ @<your-org>/ai-team
+
+# 문서
+docs/ @<your-org>/docs-team
+*.md @<your-org>/docs-team
+
+# 보안 관련
+SECURITY.md @<your-org>/security
+.github/workflows/security-scan.yml @<your-org>/security
+
+# 인프라 (필요시 추가)
+# terraform/ @<your-org>/infra
+# k8s/ @<your-org>/infra

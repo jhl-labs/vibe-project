@@ -1,0 +1,110 @@
+name: Feature Request
+description: 새로운 기능이나 개선사항을 제안해주세요
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        기능 제안을 해주셔서 감사합니다!
+        아이디어를 자세히 공유해주시면 검토에 도움이 됩니다.
+
+  - type: checkboxes
+    id: existing-issue
+    attributes:
+      label: 기존 이슈 확인
+      description: 제출하기 전에 확인해주세요
+      options:
+        - label: 기존 이슈를 검색하여 중복 제안이 아님을 확인했습니다
+          required: true
+
+  - type: dropdown
+    id: feature-type
+    attributes:
+      label: 기능 유형
+      description: 어떤 유형의 기능인가요?
+      options:
+        - New Feature (새로운 기능)
+        - Enhancement (기존 기능 개선)
+        - Performance (성능 개선)
+        - Developer Experience (개발자 경험 개선)
+        - Documentation (문서 개선)
+        - Other (기타)
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 문제 또는 동기
+      description: 이 기능이 필요한 이유를 설명해주세요
+      placeholder: |
+        예: "현재 ~할 때 ~해서 불편합니다"
+        또는 "~를 하려면 ~가 필요합니다"
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: 제안하는 해결책
+      description: 원하는 기능을 자세히 설명해주세요
+      placeholder: |
+        이 기능이 어떻게 동작하면 좋을지 설명해주세요.
+        가능하다면 예시나 유사 사례를 포함해주세요.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 고려한 대안
+      description: 다른 대안을 고려해보셨나요?
+      placeholder: 시도해본 다른 방법이나 우회 방법이 있다면 공유해주세요
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 우선순위
+      description: 이 기능의 중요도
+      options:
+        - High (비즈니스 크리티컬)
+        - Medium (상당한 가치)
+        - Low (있으면 좋음)
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 수락 기준
+      description: 이 기능이 완료되었다고 판단할 수 있는 기준
+      placeholder: |
+        - [ ] 기준 1
+        - [ ] 기준 2
+        - [ ] 기준 3
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 추가 정보
+      description: 스크린샷, 목업, 참고 자료 등
+      placeholder: 제안을 이해하는 데 도움이 될 추가 자료
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: 기여 의향
+      description: 이 기능 구현에 참여하시겠습니까?
+      options:
+        - label: 이 기능 구현에 기여할 의향이 있습니다
+
+  - type: checkboxes
+    id: ai-assisted
+    attributes:
+      label: AI 지원
+      description: AI 도구를 사용했나요?
+      options:
+        - label: 이 제안은 AI 에이전트의 도움으로 작성되었습니다

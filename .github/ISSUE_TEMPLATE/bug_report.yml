@@ -1,0 +1,110 @@
+name: Bug Report
+description: 버그를 보고하여 개선에 도움을 주세요
+title: "[Bug]: "
+labels: ["bug", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        버그 보고서를 작성해 주셔서 감사합니다!
+        가능한 자세히 작성해주시면 더 빠르게 해결할 수 있습니다.
+
+  - type: checkboxes
+    id: existing-issue
+    attributes:
+      label: 기존 이슈 확인
+      description: 제출하기 전에 확인해주세요
+      options:
+        - label: 기존 이슈를 검색하여 중복이 아님을 확인했습니다
+          required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 버그 설명
+      description: 버그에 대한 명확하고 간결한 설명
+      placeholder: 어떤 문제가 발생했나요?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 재현 방법
+      description: 버그를 재현하는 단계
+      placeholder: |
+        1. '...'로 이동
+        2. '...'를 클릭
+        3. '...'까지 스크롤
+        4. 오류 발생
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 예상 동작
+      description: 예상했던 동작을 설명해주세요
+      placeholder: 어떤 동작이 기대되었나요?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 실제 동작
+      description: 실제로 발생한 동작을 설명해주세요
+      placeholder: 실제로 어떤 일이 발생했나요?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: 심각도
+      description: 이 버그의 영향도
+      options:
+        - Critical (시스템 장애)
+        - High (주요 기능 불가)
+        - Medium (기능 제한)
+        - Low (사소한 문제)
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 환경
+      description: 환경 정보를 제공해주세요
+      placeholder: |
+        - OS: [예: macOS 14.0]
+        - 브라우저: [예: Chrome 120]
+        - 버전: [예: v1.0.0]
+        - Node.js: [예: 20.10.0]
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 로그 및 스크린샷
+      description: 관련 로그 출력이나 스크린샷을 첨부해주세요
+      placeholder: 에러 로그나 스크린샷을 붙여넣기
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 추가 정보
+      description: 버그에 대한 추가 컨텍스트
+      placeholder: 도움이 될 만한 다른 정보가 있나요?
+
+  - type: checkboxes
+    id: ai-assisted
+    attributes:
+      label: AI 지원
+      description: AI 도구를 사용했나요?
+      options:
+        - label: 이 이슈는 AI 에이전트의 도움으로 작성되었습니다

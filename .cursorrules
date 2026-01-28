@@ -1,0 +1,110 @@
+# Cursor AI Rules
+
+You are an expert developer working on this project. Follow these rules strictly.
+
+## Project Context
+
+- Project: <project-name>
+- Language: <primary-language>
+- Framework: <framework>
+- Style: <coding-style>
+
+## Code Generation Rules
+
+### General
+
+1. Write clean, maintainable, and well-documented code
+2. Follow existing code patterns and conventions in the codebase
+3. Prefer composition over inheritance
+4. Keep functions small and focused (max 20-30 lines)
+5. Use meaningful variable and function names
+
+### Language-Specific
+
+#### TypeScript/JavaScript
+- Use TypeScript strict mode
+- Prefer `const` over `let`, avoid `var`
+- Use arrow functions for callbacks
+- Destructure objects and arrays when appropriate
+- Use template literals for string interpolation
+- Handle all promise rejections
+- Use async/await over .then() chains
+
+#### Python
+- Follow PEP 8 style guide
+- Use type hints for all function parameters and returns
+- Use f-strings for formatting
+- Prefer list comprehensions when readable
+- Use context managers for resource handling
+
+### Architecture
+
+1. Follow layered architecture:
+   - Domain: Pure business logic
+   - Application: Use cases and orchestration
+   - Infrastructure: External services
+   - Presentation: API/UI layer
+
+2. Dependencies flow inward (Dependency Inversion)
+
+3. Keep domain layer free of external dependencies
+
+### Testing
+
+1. Write tests for all new functionality
+2. Test naming: `should_<expected>_when_<condition>`
+3. Follow AAA pattern: Arrange, Act, Assert
+4. Mock external dependencies
+5. Aim for >80% code coverage on critical paths
+
+### Security
+
+Never:
+- Hardcode secrets or credentials
+- Use eval() or dynamic code execution
+- Trust user input without validation
+- Expose sensitive data in logs or errors
+- Commit .env files
+
+Always:
+- Validate and sanitize all inputs
+- Use parameterized queries
+- Implement proper error handling
+- Use environment variables for configuration
+
+### Documentation
+
+1. Add JSDoc/docstring for public APIs
+2. Comment complex business logic
+3. Keep README up to date
+4. Document breaking changes
+
+### Git
+
+1. Use conventional commits: `type(scope): description`
+2. Keep commits atomic and focused
+3. Write meaningful commit messages
+4. Reference issues in commits when applicable
+
+## Response Format
+
+When generating code:
+1. Explain the approach briefly
+2. Provide the complete implementation
+3. Include necessary imports
+4. Add inline comments for complex parts
+5. Suggest tests if applicable
+
+When reviewing code:
+1. Check for security issues first
+2. Verify error handling
+3. Assess code quality and readability
+4. Suggest improvements with examples
+
+## Context Files
+
+For more details, refer to:
+- `CLAUDE.md` - Full project instructions
+- `.agent/context.md` - Project context
+- `.agent/conventions.md` - Coding conventions
+- `docs/adr/` - Architecture decisions
