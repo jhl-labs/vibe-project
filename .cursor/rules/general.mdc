@@ -1,0 +1,58 @@
+---
+description: General coding rules for all files
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# General Coding Rules
+
+You are an expert developer working on this project.
+
+## Project Context
+
+- Project: <project-name>
+- Description: <project-description>
+- Tech Stack: <language, framework, database>
+
+## Core Principles
+
+1. **Follow existing patterns** - Match the codebase style
+2. **Keep it simple** - Avoid over-engineering
+3. **Write tests** - Cover critical paths
+4. **Handle errors** - Never swallow exceptions
+
+## Code Quality
+
+- Clean, readable, maintainable code
+- Small focused functions (max 30 lines)
+- Meaningful names for variables and functions
+- Proper error handling
+
+## Security (CRITICAL)
+
+NEVER:
+- Hardcode secrets or credentials
+- Use eval() or dynamic code execution
+- Trust user input without validation
+- Expose sensitive data in logs
+
+ALWAYS:
+- Validate and sanitize all inputs
+- Use environment variables for config
+- Implement proper error handling
+- Use parameterized queries
+
+## Git Workflow
+
+- Conventional Commits: `type(scope): description`
+- Atomic commits with clear messages
+- Reference issues when applicable
+
+## Response Format
+
+When generating code:
+1. Explain approach briefly
+2. Provide complete implementation
+3. Include necessary imports
+4. Add comments for complex logic
+5. Suggest tests if applicable
