@@ -1,0 +1,33 @@
+# ===========================
+# Labels Sync
+# ===========================
+# labels.yml 파일에서 정의된 라벨을 저장소에 동기화합니다.
+
+name: Sync Labels
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/labels.yml"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sync labels
+        uses: EndBug/label-sync@v2
+        with:
+          config-file: .github/labels.yml
+          # 정의되지 않은 라벨 삭제 여부
+          delete-other-labels: false
+          # Dry run (실제로 변경하지 않음)
+          dry-run: false
+          token: ${{ secrets.GITHUB_TOKEN }}

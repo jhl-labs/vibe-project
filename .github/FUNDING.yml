@@ -1,0 +1,27 @@
+# ===========================
+# GitHub Sponsors Configuration
+# ===========================
+# 스폰서십을 위한 설정입니다.
+# 프로젝트에 맞게 수정하여 사용하세요.
+#
+# 자세한 정보: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository
+
+# GitHub Sponsors 사용자명
+# github: [your-username]
+
+# Patreon 사용자명
+# patreon: your-patreon
+
+# Open Collective 사용자명
+# open_collective: your-open-collective
+
+# Ko-fi 사용자명
+# ko_fi: your-ko-fi
+
+# Buy Me a Coffee 사용자명
+# buy_me_a_coffee: your-buy-me-a-coffee
+
+# 커스텀 URL (최대 4개)
+# custom:
+#   - https://your-donation-link.com
+#   - https://your-sponsorship-page.com

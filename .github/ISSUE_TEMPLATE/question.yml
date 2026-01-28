@@ -1,0 +1,81 @@
+name: Question
+description: 질문이 있으신가요?
+title: "[Question]: "
+labels: ["question", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        질문을 남겨주셔서 감사합니다!
+        가능한 구체적으로 작성해주시면 더 정확한 답변을 드릴 수 있습니다.
+
+        > 💡 **팁**: 일반적인 질문은 [Discussions](https://github.com/<your-org>/<your-project>/discussions)를 이용해주세요.
+
+  - type: checkboxes
+    id: existing-resources
+    attributes:
+      label: 기존 리소스 확인
+      description: 질문 전에 확인해주세요
+      options:
+        - label: 문서를 확인했습니다
+          required: true
+        - label: 기존 이슈/Discussion을 검색했습니다
+          required: true
+        - label: FAQ를 확인했습니다
+
+  - type: dropdown
+    id: question-type
+    attributes:
+      label: 질문 유형
+      description: 어떤 종류의 질문인가요?
+      options:
+        - Usage (사용법)
+        - Configuration (설정)
+        - Integration (통합)
+        - Best Practice (모범 사례)
+        - Troubleshooting (문제 해결)
+        - Other (기타)
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: 질문
+      description: 질문을 자세히 작성해주세요
+      placeholder: |
+        무엇을 하려고 하나요?
+        어떤 점이 궁금한가요?
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: 컨텍스트
+      description: 질문의 배경을 설명해주세요
+      placeholder: |
+        - 사용 중인 환경 (OS, 버전 등)
+        - 시도해본 것
+        - 참고한 문서
+
+  - type: textarea
+    id: code
+    attributes:
+      label: 관련 코드
+      description: 관련 코드가 있다면 공유해주세요
+      placeholder: |
+        ```
+        여기에 코드를 붙여넣기
+        ```
+      render: markdown
+
+  - type: checkboxes
+    id: ai-assisted
+    attributes:
+      label: AI 지원
+      description: AI 도구를 사용했나요?
+      options:
+        - label: AI 에이전트의 도움을 받아 이 질문을 작성/해결하려 했습니다
