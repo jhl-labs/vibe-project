@@ -1,0 +1,162 @@
+# ===========================
+# Claude Issue Triage
+# ===========================
+# 이 워크플로우는 새 이슈를 자동으로 분류하고 라벨링합니다.
+# 주의: API 키가 필요합니다. Secrets에 ANTHROPIC_API_KEY를 설정하세요.
+
+name: Claude Issue Triage
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  triage:
+    name: Triage Issue
+    runs-on: ubuntu-latest
+    # 봇이 만든 이슈는 제외
+    if: github.event.issue.user.type != 'Bot'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get issue content
+        id: issue
+        run: |
+          # 이슈 제목과 본문 가져오기
+          TITLE="${{ github.event.issue.title }}"
+          BODY="${{ github.event.issue.body }}"
+
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
+          echo "body<<EOF" >> $GITHUB_OUTPUT
+          echo "$BODY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Analyze issue with Claude
+        id: analyze
+        if: env.ANTHROPIC_API_KEY != ''
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          # Claude API를 호출하여 이슈 분석
+          # 실제 구현 시 curl 또는 전용 action 사용
+
+          PROMPT="Analyze this GitHub issue and provide:
+          1. Category: bug, feature, documentation, question, or other
+          2. Priority: critical, high, medium, low
+          3. Components: affected areas (comma-separated)
+          4. Summary: one-line summary in Korean
+
+          Issue Title: ${{ steps.issue.outputs.title }}
+
+          Issue Body:
+          ${{ steps.issue.outputs.body }}
+
+          Respond in JSON format:
+          {
+            \"category\": \"...\",
+            \"priority\": \"...\",
+            \"components\": [\"...\"],
+            \"summary\": \"...\"
+          }"
+
+          # 여기에 실제 Claude API 호출 로직 추가
+          echo "Analysis would be performed here"
+
+          # 기본값 설정 (실제 구현 시 Claude 응답으로 대체)
+          echo "category=triage" >> $GITHUB_OUTPUT
+          echo "priority=medium" >> $GITHUB_OUTPUT
+
+      - name: Apply labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = context.issue.number;
+
+            // 기존 라벨 가져오기
+            const { data: issue } = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber
+            });
+
+            const existingLabels = issue.labels.map(l => l.name);
+
+            // triage 라벨이 없으면 추가
+            if (!existingLabels.includes('triage')) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                labels: ['triage']
+              });
+            }
+
+            // 이슈 제목 기반 간단한 분류
+            const title = context.payload.issue.title.toLowerCase();
+
+            const labelsToAdd = [];
+
+            if (title.includes('bug') || title.includes('error') || title.includes('fix')) {
+              labelsToAdd.push('bug');
+            }
+            if (title.includes('feature') || title.includes('enhancement') || title.includes('add')) {
+              labelsToAdd.push('enhancement');
+            }
+            if (title.includes('doc') || title.includes('readme')) {
+              labelsToAdd.push('documentation');
+            }
+            if (title.includes('security') || title.includes('vulnerability')) {
+              labelsToAdd.push('security');
+            }
+            if (title.includes('question') || title.includes('help') || title.includes('how')) {
+              labelsToAdd.push('question');
+            }
+
+            if (labelsToAdd.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                labels: labelsToAdd
+              });
+            }
+
+      - name: Add initial comment
+        if: env.ANTHROPIC_API_KEY == ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = context.issue.number;
+
+            // 중복 코멘트 방지
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber
+            });
+
+            const hasTriageComment = comments.some(c =>
+              c.user.type === 'Bot' && c.body.includes('이슈가 접수되었습니다')
+            );
+
+            if (!hasTriageComment) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                body: `## 이슈가 접수되었습니다 📋
+
+이슈를 제출해 주셔서 감사합니다!
+
+- 이슈는 곧 검토될 예정입니다
+- 추가 정보가 필요하면 요청드릴 수 있습니다
+- 긴급한 보안 이슈는 [SECURITY.md](../SECURITY.md)를 참조해 주세요
+
+---
+*이 메시지는 자동으로 생성되었습니다.*`
+              });
+            }

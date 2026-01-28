@@ -1,0 +1,182 @@
+# ===========================
+# Claude Code Suggest
+# ===========================
+# 이 워크플로우는 수동으로 트리거하여 코드 개선 제안을 받습니다.
+# 주의: API 키가 필요합니다. Secrets에 ANTHROPIC_API_KEY를 설정하세요.
+
+name: Claude Code Suggest
+
+on:
+  workflow_dispatch:
+    inputs:
+      path:
+        description: "분석할 파일 또는 디렉토리 경로"
+        required: true
+        default: "src/"
+        type: string
+      focus:
+        description: "분석 초점"
+        required: true
+        type: choice
+        options:
+          - all
+          - performance
+          - security
+          - readability
+          - best-practices
+      create-issue:
+        description: "분석 결과를 이슈로 생성"
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  analyze:
+    name: Analyze Code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate path
+        run: |
+          if [ ! -e "${{ github.event.inputs.path }}" ]; then
+            echo "Error: Path '${{ github.event.inputs.path }}' does not exist"
+            exit 1
+          fi
+
+      - name: Collect code files
+        id: collect
+        run: |
+          # 분석할 파일 수집
+          FILES=""
+          if [ -d "${{ github.event.inputs.path }}" ]; then
+            # 디렉토리인 경우 소스 파일 수집
+            FILES=$(find "${{ github.event.inputs.path }}" -type f \( \
+              -name "*.ts" -o \
+              -name "*.js" -o \
+              -name "*.py" -o \
+              -name "*.go" -o \
+              -name "*.java" -o \
+              -name "*.rs" \
+            \) | head -20)
+          else
+            FILES="${{ github.event.inputs.path }}"
+          fi
+
+          echo "files<<EOF" >> $GITHUB_OUTPUT
+          echo "$FILES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          FILE_COUNT=$(echo "$FILES" | wc -l)
+          echo "file_count=$FILE_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Analyze with Claude
+        id: analyze
+        if: env.ANTHROPIC_API_KEY != ''
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          # Claude API를 호출하여 코드 분석
+          FOCUS="${{ github.event.inputs.focus }}"
+
+          case "$FOCUS" in
+            performance)
+              PROMPT_FOCUS="performance issues, inefficient algorithms, unnecessary computations"
+              ;;
+            security)
+              PROMPT_FOCUS="security vulnerabilities, unsafe practices, OWASP top 10"
+              ;;
+            readability)
+              PROMPT_FOCUS="code readability, naming conventions, code structure"
+              ;;
+            best-practices)
+              PROMPT_FOCUS="best practices, design patterns, SOLID principles"
+              ;;
+            *)
+              PROMPT_FOCUS="all aspects including performance, security, readability, and best practices"
+              ;;
+          esac
+
+          # 여기에 실제 Claude API 호출 로직 추가
+          echo "Code analysis would be performed here with focus on: $PROMPT_FOCUS"
+
+      - name: Generate report
+        id: report
+        run: |
+          # 분석 리포트 생성
+          REPORT="## 코드 분석 리포트
+
+          ### 분석 정보
+          - **경로**: \`${{ github.event.inputs.path }}\`
+          - **초점**: ${{ github.event.inputs.focus }}
+          - **파일 수**: ${{ steps.collect.outputs.file_count }}
+          - **분석 시각**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+
+          ### 분석된 파일
+          \`\`\`
+          ${{ steps.collect.outputs.files }}
+          \`\`\`
+
+          ### 개선 제안
+
+          > **Note**: Claude API 키가 설정되지 않아 자동 분석이 수행되지 않았습니다.
+          > \`ANTHROPIC_API_KEY\` 시크릿을 설정하면 AI 기반 코드 분석이 활성화됩니다.
+
+          #### 수동 검토 권장 사항
+
+          1. **성능**
+             - N+1 쿼리 문제 확인
+             - 불필요한 반복문 검토
+             - 메모리 사용 패턴 분석
+
+          2. **보안**
+             - 입력 검증 확인
+             - SQL/XSS 인젝션 취약점 검토
+             - 인증/인가 로직 확인
+
+          3. **가독성**
+             - 함수/변수 네이밍 검토
+             - 코드 중복 확인
+             - 주석 적절성 검토
+
+          4. **모범 사례**
+             - SOLID 원칙 준수 확인
+             - 에러 처리 패턴 검토
+             - 테스트 커버리지 확인
+
+          ---
+          *이 리포트는 자동으로 생성되었습니다.*"
+
+          echo "report<<EOF" >> $GITHUB_OUTPUT
+          echo "$REPORT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create issue
+        if: github.event.inputs.create-issue == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = `[Code Analysis] ${{ github.event.inputs.path }} - ${{ github.event.inputs.focus }}`;
+            const body = `${{ steps.report.outputs.report }}`;
+
+            const { data: issue } = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['code-analysis', 'ai-generated']
+            });
+
+            console.log(`Created issue #${issue.number}: ${issue.html_url}`);
+
+      - name: Output summary
+        run: |
+          echo "## Code Analysis Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Path**: \`${{ github.event.inputs.path }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Focus**: ${{ github.event.inputs.focus }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Files analyzed**: ${{ steps.collect.outputs.file_count }}" >> $GITHUB_STEP_SUMMARY

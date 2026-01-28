@@ -1,0 +1,214 @@
+# ===========================
+# Claude Doc Sync
+# ===========================
+# 이 워크플로우는 코드와 문서의 동기화 상태를 검증합니다.
+# 주간 스케줄 또는 수동으로 실행됩니다.
+
+name: Claude Doc Sync
+
+on:
+  schedule:
+    # 매주 월요일 09:00 KST (00:00 UTC)
+    - cron: "0 0 * * 1"
+  workflow_dispatch:
+    inputs:
+      create-pr:
+        description: "불일치 발견 시 수정 PR 생성"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  check-sync:
+    name: Check Documentation Sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Find documentation files
+        id: docs
+        run: |
+          # 문서 파일 목록
+          DOCS=$(find . -type f \( \
+            -name "*.md" -o \
+            -name "*.mdx" \
+          \) -not -path "./.git/*" -not -path "./node_modules/*")
+
+          echo "files<<EOF" >> $GITHUB_OUTPUT
+          echo "$DOCS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          DOC_COUNT=$(echo "$DOCS" | wc -l)
+          echo "count=$DOC_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Check for outdated docs
+        id: outdated
+        run: |
+          # 최근 30일간 변경된 소스 파일
+          CHANGED_SRC=$(git log --since="30 days ago" --name-only --pretty=format: -- \
+            "*.ts" "*.js" "*.py" "*.go" "*.java" | sort -u | grep -v '^$' || true)
+
+          # 최근 30일간 변경된 문서 파일
+          CHANGED_DOCS=$(git log --since="30 days ago" --name-only --pretty=format: -- \
+            "*.md" | sort -u | grep -v '^$' || true)
+
+          echo "## 최근 30일 변경사항" > sync_report.md
+          echo "" >> sync_report.md
+
+          echo "### 변경된 소스 파일" >> sync_report.md
+          if [ -n "$CHANGED_SRC" ]; then
+            echo "\`\`\`" >> sync_report.md
+            echo "$CHANGED_SRC" >> sync_report.md
+            echo "\`\`\`" >> sync_report.md
+          else
+            echo "변경된 소스 파일 없음" >> sync_report.md
+          fi
+
+          echo "" >> sync_report.md
+          echo "### 변경된 문서 파일" >> sync_report.md
+          if [ -n "$CHANGED_DOCS" ]; then
+            echo "\`\`\`" >> sync_report.md
+            echo "$CHANGED_DOCS" >> sync_report.md
+            echo "\`\`\`" >> sync_report.md
+          else
+            echo "변경된 문서 파일 없음" >> sync_report.md
+          fi
+
+          # 동기화 필요 여부 판단
+          SRC_COUNT=$(echo "$CHANGED_SRC" | grep -c . || echo 0)
+          DOC_COUNT=$(echo "$CHANGED_DOCS" | grep -c . || echo 0)
+
+          if [ "$SRC_COUNT" -gt 0 ] && [ "$DOC_COUNT" -eq 0 ]; then
+            echo "needs_sync=true" >> $GITHUB_OUTPUT
+            echo "" >> sync_report.md
+            echo "### ⚠️ 동기화 필요" >> sync_report.md
+            echo "소스 코드가 변경되었지만 문서는 업데이트되지 않았습니다." >> sync_report.md
+          else
+            echo "needs_sync=false" >> $GITHUB_OUTPUT
+            echo "" >> sync_report.md
+            echo "### ✅ 동기화 상태 양호" >> sync_report.md
+          fi
+
+      - name: Check broken links
+        id: links
+        run: |
+          # 문서 내 깨진 링크 확인 (간단한 버전)
+          echo "" >> sync_report.md
+          echo "### 링크 검사" >> sync_report.md
+
+          BROKEN_LINKS=""
+          while IFS= read -r file; do
+            if [ -f "$file" ]; then
+              # 마크다운 링크 추출 [text](path)
+              LINKS=$(grep -oE '\[.*\]\([^)]+\)' "$file" 2>/dev/null | \
+                      grep -oE '\([^)]+\)' | tr -d '()' | \
+                      grep -v '^http' | grep -v '^#' || true)
+
+              for link in $LINKS; do
+                # 상대 경로 해석
+                dir=$(dirname "$file")
+                target="$dir/$link"
+                target=$(realpath -m "$target" 2>/dev/null || echo "$target")
+
+                if [ ! -e "$target" ] && [ ! -e "${target%.md}" ]; then
+                  BROKEN_LINKS="$BROKEN_LINKS\n- $file: $link"
+                fi
+              done
+            fi
+          done <<< "${{ steps.docs.outputs.files }}"
+
+          if [ -n "$BROKEN_LINKS" ]; then
+            echo "has_broken_links=true" >> $GITHUB_OUTPUT
+            echo "⚠️ 깨진 링크 발견:" >> sync_report.md
+            echo -e "$BROKEN_LINKS" >> sync_report.md
+          else
+            echo "has_broken_links=false" >> $GITHUB_OUTPUT
+            echo "✅ 깨진 링크 없음" >> sync_report.md
+          fi
+
+      - name: Check README completeness
+        run: |
+          echo "" >> sync_report.md
+          echo "### README 완전성 검사" >> sync_report.md
+
+          if [ -f "README.md" ]; then
+            MISSING=""
+
+            # 필수 섹션 확인
+            grep -q "## Installation\|## Quick Start\|## Getting Started" README.md || \
+              MISSING="$MISSING\n- Installation/Quick Start 섹션 누락"
+            grep -q "## Usage\|## Example" README.md || \
+              MISSING="$MISSING\n- Usage/Example 섹션 누락"
+            grep -q "## License" README.md || \
+              MISSING="$MISSING\n- License 섹션 누락"
+
+            if [ -n "$MISSING" ]; then
+              echo "⚠️ README.md에 다음 섹션이 누락되었습니다:" >> sync_report.md
+              echo -e "$MISSING" >> sync_report.md
+            else
+              echo "✅ README.md 필수 섹션 존재" >> sync_report.md
+            fi
+          else
+            echo "❌ README.md 파일이 없습니다" >> sync_report.md
+          fi
+
+      - name: Generate report
+        id: report
+        run: |
+          # 최종 리포트 생성
+          FINAL_REPORT="# 문서 동기화 리포트
+
+          **검사 일시**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          **검사된 문서 수**: ${{ steps.docs.outputs.count }}
+
+          $(cat sync_report.md)
+
+          ---
+          *이 리포트는 자동으로 생성되었습니다.*"
+
+          echo "report<<EOF" >> $GITHUB_OUTPUT
+          echo "$FINAL_REPORT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create issue if needed
+        if: steps.outdated.outputs.needs_sync == 'true' || steps.links.outputs.has_broken_links == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // 기존 이슈가 있는지 확인
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'documentation,sync-needed'
+            });
+
+            if (issues.length === 0) {
+              // 새 이슈 생성
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: '[Docs] 문서 동기화 필요',
+                body: `${{ steps.report.outputs.report }}`,
+                labels: ['documentation', 'sync-needed']
+              });
+            } else {
+              // 기존 이슈에 코멘트 추가
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issues[0].number,
+                body: `## 주간 검사 결과 업데이트\n\n${{ steps.report.outputs.report }}`
+              });
+            }
+
+      - name: Output summary
+        run: |
+          cat sync_report.md >> $GITHUB_STEP_SUMMARY
