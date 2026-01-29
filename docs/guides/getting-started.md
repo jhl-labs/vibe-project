@@ -184,7 +184,19 @@ claude
 ### Cursor AI
 
 1. Cursor에서 프로젝트 열기
-2. `.cursorrules` 파일이 자동으로 로드됩니다
+2. `.cursor/rules/*.mdc` 파일이 자동으로 로드됩니다
+   - `general.mdc` - 모든 파일에 적용되는 기본 규칙
+   - `typescript.mdc` - TypeScript/JavaScript 파일 전용 규칙
+   - `python.mdc` - Python 파일 전용 규칙
+   - `architecture.mdc` - Clean Architecture 레이어 규칙
+
+> **참고**: `.cursorrules` 파일은 호환성을 위해 유지되지만 **deprecated** 됨.
+> 새로운 `.cursor/rules/*.mdc` 형식을 사용하세요.
+
+### Roo Code
+
+1. Roo Code에서 프로젝트 열기
+2. `.roo/rules.md` 및 `.roo/rules/*.mdc` 파일이 로드됩니다
 
 ## 문제 해결
 

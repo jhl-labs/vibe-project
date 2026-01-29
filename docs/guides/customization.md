@@ -450,8 +450,8 @@ k8s/
 - [ ] 플레이스홀더 교체 완료
 - [ ] `CLAUDE.md` 프로젝트 정보 업데이트
 - [ ] `.agent/context.md` 업데이트
-- [ ] `.cursorrules` 언어별 규칙 추가
-- [ ] `.roo/rules.md` 업데이트
+- [ ] `.cursor/rules/*.mdc` 언어별 규칙 추가/수정
+- [ ] `.roo/rules.md` 및 `.roo/rules/*.mdc` 업데이트
 
 ### 언어/프레임워크 설정
 

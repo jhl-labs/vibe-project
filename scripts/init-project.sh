@@ -143,8 +143,8 @@ select_ai_agents() {
     echo "Select the AI agents you plan to use (multiple selection allowed):"
     echo ""
     echo "  1) Claude Code (CLAUDE.md)"
-    echo "  2) Cursor AI (.cursorrules)"
-    echo "  3) Roo Code (.roo/rules.md)"
+    echo "  2) Cursor AI (.cursor/rules/*.mdc)"
+    echo "  3) Roo Code (.roo/rules/*.mdc)"
     echo "  4) All of the above"
     echo "  5) None (I'll configure manually)"
     echo ""
@@ -226,7 +226,8 @@ replace_placeholders() {
         -name "*.toml" -o \
         -name "LICENSE" -o \
         -name "CODEOWNERS" -o \
-        -name ".cursorrules" \
+        -name ".cursorrules" -o \
+        -name "*.mdc" \
     \) -not -path "./.git/*" -not -path "./node_modules/*" -not -path "./.venv/*" -not -path "./venv/*")
 
     local count=0
@@ -275,11 +276,11 @@ configure_ai_agents() {
                     # Keep CLAUDE.md but add a note
                     ;;
                 cursor)
-                    if [ -f ".cursorrules" ]; then
-                        read -p "Remove .cursorrules (Cursor not selected)? (y/N): " REMOVE_CURSOR
+                    if [ -d ".cursor" ] || [ -f ".cursorrules" ]; then
+                        read -p "Remove Cursor AI config (.cursor/, .cursorrules)? (y/N): " REMOVE_CURSOR
                         if [ "$REMOVE_CURSOR" = "y" ]; then
-                            rm -f .cursorrules
-                            print_info "Removed .cursorrules"
+                            rm -rf .cursor .cursorrules
+                            print_info "Removed Cursor AI configuration"
                         fi
                     fi
                     ;;
