@@ -29,9 +29,15 @@ AI Agent가 프로젝트 컨텍스트를 정확히 이해하고 일관된 출력
 ```
 .
 ├── CLAUDE.md              # Claude Code 전용 지시 파일
-├── .cursorrules           # Cursor AI 전용 규칙 파일
+├── .cursor/rules/         # Cursor AI 규칙 (.mdc 신규 형식)
+│   ├── general.mdc        # 기본 규칙 (alwaysApply)
+│   ├── typescript.mdc     # TypeScript 전용 (글로브 매칭)
+│   ├── python.mdc         # Python 전용 (글로브 매칭)
+│   └── architecture.mdc   # Clean Architecture 규칙
+├── .cursorrules           # Cursor AI 레거시 (deprecated)
 ├── .roo/                  # Roo Code 전용 설정 디렉토리
-│   └── rules.md
+│   ├── rules.md
+│   └── rules/general.mdc
 └── .agent/
     ├── context.md         # 공통 프로젝트 컨텍스트
     ├── architecture.md    # 아키텍처 설명 문서
@@ -388,26 +394,43 @@ AI 코드 생성 → 개발자 검토 → 단위 테스트 → 보안 스캔 →
 ```
 vibe-project-template/
 ├── .github/
-│   ├── workflows/           # GitHub Actions 워크플로우
-│   ├── ISSUE_TEMPLATE/      # 이슈 템플릿
+│   ├── workflows/           # GitHub Actions 워크플로우 (12개)
+│   ├── ISSUE_TEMPLATE/      # 이슈 템플릿 (3종 + config)
 │   ├── PULL_REQUEST_TEMPLATE.md
 │   ├── CODEOWNERS
-│   └── dependabot.yml
+│   ├── dependabot.yml
+│   ├── labeler.yml          # PR 자동 라벨링 규칙
+│   ├── labels.yml           # 라벨 정의
+│   └── FUNDING.yml          # 스폰서 설정
 ├── .agent/                  # AI Agent 공통 설정
 │   ├── context.md
-│   ├── skills/
-│   └── subagents/
+│   ├── conventions.md
+│   ├── architecture.md
+│   ├── guidelines.md
+│   ├── commands.md
+│   ├── prompts/             # 프롬프트 라이브러리 (15개)
+│   ├── skills/              # Agent 스킬 (5개)
+│   └── subagents/           # 서브에이전트 (4개)
+├── .cursor/rules/           # Cursor AI 규칙 (.mdc 신규 형식)
+├── .roo/rules/              # Roo Code 규칙 (.mdc 형식)
+├── .vscode/                 # VS Code 설정 템플릿
 ├── .husky/                  # Git Hooks
 ├── docs/
 │   ├── adr/                 # Architecture Decision Records
 │   ├── api/                 # API 문서
-│   └── guides/              # 개발 가이드
+│   └── guides/              # 개발 가이드 (8개)
+├── examples/
+│   ├── typescript-api/      # Express + Prisma 예제
+│   └── python-api/          # FastAPI + SQLAlchemy 예제
 ├── scripts/                 # 유틸리티 스크립트
 ├── CLAUDE.md                # Claude Code 지시 파일
-├── .cursorrules             # Cursor 규칙 파일
+├── .cursorrules             # Cursor 규칙 (레거시, deprecated)
+├── .mcp.json.example        # MCP 설정 템플릿
 ├── .editorconfig
 ├── .gitignore
 ├── .pre-commit-config.yaml
+├── CHANGELOG.md             # 변경 이력
+├── cliff.toml               # git-cliff 설정
 ├── CONTRIBUTING.md          # 기여 가이드
 ├── LICENSE
 ├── README.md
@@ -436,7 +459,7 @@ vibe-project-template/
 
 ### 5.2 커스터마이징
 
-1. `CLAUDE.md` 및 `.cursorrules` 파일을 프로젝트에 맞게 수정
+1. `CLAUDE.md` 및 `.cursor/rules/*.mdc` 파일을 프로젝트에 맞게 수정
 2. `.github/workflows/` 워크플로우 활성화 및 설정
 3. `CODEOWNERS` 파일에 팀 멤버 등록
 4. 브랜치 보호 규칙 설정
@@ -445,15 +468,15 @@ vibe-project-template/
 
 ## 6. 로드맵
 
-### Phase 1: Foundation (현재)
+### Phase 1: Foundation ✅
 - [x] 기본 프로젝트 구조 정의
 - [x] AI Agent 지시 파일 템플릿
-- [ ] 핵심 GitHub Actions 워크플로우
+- [x] 핵심 GitHub Actions 워크플로우
 
-### Phase 2: Automation
-- [ ] Claude PR 리뷰 자동화
-- [ ] 테스트 자동 생성 파이프라인
-- [ ] 문서 동기화 검증
+### Phase 2: Automation ✅
+- [x] Claude PR 리뷰 자동화
+- [x] 테스트 자동 생성 파이프라인
+- [x] 문서 동기화 검증
 
 ### Phase 3: Enterprise Features
 - [ ] SSO 연동 가이드

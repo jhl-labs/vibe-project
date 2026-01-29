@@ -32,8 +32,8 @@
 | Agent | 설정 파일 | 설명 |
 |-------|----------|------|
 | **Claude Code** | `CLAUDE.md` | Anthropic Claude CLI |
-| **Cursor AI** | `.cursorrules` | VS Code 기반 AI IDE |
-| **Roo Code** | `.roo/rules.md` | AI 코딩 어시스턴트 |
+| **Cursor AI** | `.cursor/rules/*.mdc` | VS Code 기반 AI IDE |
+| **Roo Code** | `.roo/rules/*.mdc` | AI 코딩 어시스턴트 |
 
 ### 📚 프롬프트 라이브러리
 15개의 검증된 프롬프트 템플릿 제공:
@@ -117,8 +117,9 @@ vibe-project-template/
 │
 ├── 🤖 AI Agent 설정
 │   ├── CLAUDE.md                 # Claude Code 지시사항
-│   ├── .cursorrules              # Cursor AI 규칙
-│   ├── .roo/rules.md             # Roo Code 규칙
+│   ├── .cursor/rules/*.mdc       # Cursor AI 규칙 (신규 형식)
+│   ├── .cursorrules              # Cursor AI 규칙 (레거시)
+│   ├── .roo/rules/*.mdc          # Roo Code 규칙
 │   └── .mcp.json.example         # MCP 설정 템플릿
 │
 ├── 📂 .agent/                    # AI 컨텍스트
@@ -130,7 +131,7 @@ vibe-project-template/
 │   └── subagents/                # 전문 서브에이전트
 │
 ├── 📂 .github/                   # GitHub 설정
-│   ├── workflows/                # CI/CD 파이프라인 (7개)
+│   ├── workflows/                # CI/CD 파이프라인 (12개)
 │   ├── ISSUE_TEMPLATE/           # 이슈 템플릿
 │   └── PULL_REQUEST_TEMPLATE.md
 │
@@ -214,11 +215,11 @@ vibe-project-template/
 # Claude Code
 vim CLAUDE.md
 
-# Cursor AI
-vim .cursorrules
+# Cursor AI (.cursor/rules/*.mdc - 신규 형식 권장)
+vim .cursor/rules/general.mdc
 
 # Roo Code
-vim .roo/rules.md
+vim .roo/rules/general.mdc
 ```
 
 ### 프로젝트 컨텍스트 수정
