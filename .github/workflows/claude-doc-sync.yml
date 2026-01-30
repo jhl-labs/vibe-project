@@ -180,8 +180,12 @@ jobs:
       - name: Create issue if needed
         if: steps.outdated.outputs.needs_sync == 'true' || steps.links.outputs.has_broken_links == 'true'
         uses: actions/github-script@v7
+        env:
+          SYNC_REPORT: ${{ steps.report.outputs.report }}
         with:
           script: |
+            const report = process.env.SYNC_REPORT;
+
             // 기존 이슈가 있는지 확인
             const { data: issues } = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
@@ -196,7 +200,7 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 title: '[Docs] 문서 동기화 필요',
-                body: `${{ steps.report.outputs.report }}`,
+                body: report,
                 labels: ['documentation', 'sync-needed']
               });
             } else {
@@ -205,7 +209,7 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: issues[0].number,
-                body: `## 주간 검사 결과 업데이트\n\n${{ steps.report.outputs.report }}`
+                body: `## 주간 검사 결과 업데이트\n\n${report}`
               });
             }
 
