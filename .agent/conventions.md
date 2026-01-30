@@ -309,6 +309,9 @@ async function createUser(data: CreateUserDto): Promise<User> {
 - `refactor`: 리팩토링
 - `test`: 테스트 추가/수정
 - `chore`: 빌드, 설정 변경
+- `perf`: 성능 개선
+- `ci`: CI 설정 변경
+- `build`: 빌드 시스템 변경
 
 **예시:**
 ```
