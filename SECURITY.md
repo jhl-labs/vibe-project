@@ -241,4 +241,4 @@ trufflehog git file://. --only-verified
 ---
 
 **Note**: 이 정책은 정기적으로 검토 및 업데이트됩니다.
-마지막 업데이트: `<날짜>`
+마지막 업데이트: `<YYYY-MM-DD>`

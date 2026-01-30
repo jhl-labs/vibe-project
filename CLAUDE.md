@@ -43,7 +43,7 @@ src/
 ## 코딩 규칙
 
 ### 네이밍
-- 파일: `kebab-case.ts`
+- 파일: `kebab-case` (TS/JS: `.ts`, Python: `snake_case.py`)
 - 클래스: `PascalCase`
 - 함수/변수: `camelCase`
 - 상수: `UPPER_SNAKE_CASE`

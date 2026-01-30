@@ -89,6 +89,9 @@ target/
 # -----------------
 # Package Manager
 # -----------------
+# NOTE: 템플릿이므로 lock 파일을 무시합니다.
+# 실제 애플리케이션 프로젝트에서는 아래 항목을 제거하고
+# lock 파일을 커밋하는 것이 권장됩니다.
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
