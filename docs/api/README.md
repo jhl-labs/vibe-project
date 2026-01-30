@@ -11,13 +11,11 @@
 ```
 docs/api/
 ├── README.md           # 이 파일
-├── overview.md         # API 개요
-├── authentication.md   # 인증 가이드
-├── errors.md           # 에러 코드 정의
-└── endpoints/          # 엔드포인트별 문서
-    ├── users.md
-    ├── orders.md
-    └── ...
+└── README.md           # 이 파일 (API 개요, 인증, 에러 코드 포함)
+# 프로젝트 확장 시 아래 파일 추가 가능:
+# ├── authentication.md   # 인증 가이드
+# ├── errors.md           # 에러 코드 정의
+# └── endpoints/          # 엔드포인트별 문서
 ```
 
 ## API 개요
@@ -39,7 +37,9 @@ curl -H "Authorization: Bearer <token>" \
   https://api.example.com/v1/users
 ```
 
+<!-- 인증 가이드를 별도 파일로 작성 시 링크 활성화:
 자세한 내용은 [authentication.md](./authentication.md)를 참조하세요.
+-->
 
 ### 요청 형식
 
@@ -204,7 +204,9 @@ response = requests.post(
 | RATE_LIMIT | 429 | 요청 제한 초과 |
 | INTERNAL_ERROR | 500 | 서버 오류 |
 
+<!-- 에러 코드 상세 문서 작성 시 링크 활성화:
 자세한 에러 코드는 [errors.md](./errors.md)를 참조하세요.
+-->
 
 ## 변경 이력
 

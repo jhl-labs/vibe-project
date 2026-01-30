@@ -3,6 +3,11 @@
 # ===========================
 # 이 파일은 코드 리뷰어를 자동으로 할당합니다.
 # 자세한 정보: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# 설정 방법:
+# 1. <your-org>을 실제 GitHub 조직명으로 교체
+# 2. 각 팀(maintainers, devops 등)을 실제 GitHub 팀명으로 교체
+# 3. 팀이 없으면 개인 GitHub 사용자명(@username)으로 대체 가능
 
 # 기본 소유자 - 모든 PR에 대해 리뷰 요청
 * @<your-org>/maintainers

@@ -38,15 +38,16 @@
 
 ## AI Agent
 
-### Q: CLAUDE.md와 .cursorrules의 차이점은?
+### Q: CLAUDE.md와 Cursor 규칙의 차이점은?
 
 **A:**
 
 | 파일 | 대상 | 용도 |
 |------|------|------|
 | `CLAUDE.md` | Claude Code | 상세한 프로젝트 지침, 아키텍처, 컨벤션 |
-| `.cursorrules` | Cursor AI | 간결한 코드 생성 규칙 |
-| `.roo/rules.md` | Roo Code | Roo 전용 규칙 |
+| `.cursor/rules/*.mdc` | Cursor AI | 글로브 기반 코드 생성 규칙 (신규 형식) |
+| `.cursorrules` | Cursor AI | 레거시 형식 (**deprecated**, `.cursor/rules/*.mdc`로 마이그레이션 권장) |
+| `.roo/rules/*.mdc` | Roo Code | Roo 전용 규칙 |
 
 세 파일 모두 `.agent/` 디렉토리의 공통 컨텍스트를 참조합니다.
 

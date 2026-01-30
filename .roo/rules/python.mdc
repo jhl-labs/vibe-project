@@ -1,0 +1,71 @@
+---
+description: Python specific rules
+globs: ["**/*.py"]
+alwaysApply: false
+---
+
+# Python Rules
+
+## Style Guide
+
+- Follow PEP 8
+- Use type hints for all function parameters and returns
+- Maximum line length: 100 characters
+- Use f-strings for formatting
+
+## Naming
+
+- Files: `snake_case.py`
+- Classes: `PascalCase`
+- Functions/Variables: `snake_case`
+- Constants: `UPPER_SNAKE_CASE`
+- Private: `_leading_underscore`
+
+## Imports
+
+```python
+# Order: stdlib → third-party → local
+import os
+from typing import Optional
+
+import requests
+from fastapi import FastAPI
+
+from app.core import config
+from app.domain import User
+```
+
+## Type Hints
+
+```python
+def get_user(user_id: str) -> User | None:
+    """Get user by ID."""
+    pass
+
+async def create_user(data: CreateUserInput) -> User:
+    """Create a new user."""
+    pass
+```
+
+## Error Handling
+
+```python
+# Use specific exceptions
+class UserNotFoundError(Exception):
+    def __init__(self, user_id: str):
+        super().__init__(f"User not found: {user_id}")
+
+# Handle gracefully
+try:
+    result = await operation()
+except SpecificError as e:
+    logger.error(f"Operation failed: {e}")
+    raise
+```
+
+## Testing
+
+- Use pytest
+- Fixtures for setup
+- Parametrize for multiple cases
+- Mock external dependencies with pytest-mock

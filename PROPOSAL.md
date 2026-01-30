@@ -408,7 +408,7 @@ vibe-project-template/
 │   ├── architecture.md
 │   ├── guidelines.md
 │   ├── commands.md
-│   ├── prompts/             # 프롬프트 라이브러리 (15개)
+│   ├── prompts/             # 프롬프트 라이브러리 (14개)
 │   ├── skills/              # Agent 스킬 (5개)
 │   └── subagents/           # 서브에이전트 (4개)
 ├── .cursor/rules/           # Cursor AI 규칙 (.mdc 신규 형식)

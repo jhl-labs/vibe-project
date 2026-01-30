@@ -66,14 +66,14 @@
 ### 업데이트 적용
 
 ```bash
-# 최신 버전 확인
-npm outdated
+# Node.js
+npm outdated && npm audit fix && npm update
 
-# 보안 업데이트 적용
-npm audit fix
+# Python
+pip list --outdated && pip install --upgrade -r requirements.txt
 
-# 의존성 업데이트
-npm update
+# Go
+go list -u -m all && go get -u ./...
 ```
 
 ## 보안 모범 사례
@@ -154,7 +154,7 @@ const apiKey = 'sk-1234567890abcdef';
 
 #### 배포 전
 
-- [ ] `npm audit`으로 취약점 확인
+- [ ] 의존성 취약점 확인 (`npm audit` / `pip audit` / `go vuln`)
 - [ ] 최신 보안 패치 적용
 - [ ] 환경 변수 설정 확인
 - [ ] HTTPS 강제 설정
@@ -165,20 +165,26 @@ const apiKey = 'sk-1234567890abcdef';
 ### 의존성 검사
 
 ```bash
-# npm audit
+# Node.js
 npm audit
-
-# Snyk (더 상세한 분석)
 npx snyk test
+
+# Python
+pip audit
+safety check -r requirements.txt
+
+# Go
+govulncheck ./...
 ```
 
 ### 정적 분석
 
 ```bash
-# ESLint 보안 플러그인
-npm run lint
+# Linter (프로젝트에 맞게 선택)
+npm run lint       # Node.js (ESLint)
+ruff check .       # Python
 
-# Semgrep
+# Semgrep (범용)
 semgrep --config=auto .
 ```
 

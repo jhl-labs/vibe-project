@@ -1,5 +1,4 @@
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
 
 # ===========================
 # Pre-commit Hook
@@ -28,44 +27,36 @@ echo "Running pre-commit checks..."
 
 # 4. 시크릿 스캔
 # 민감한 정보가 커밋되지 않도록 검사
-check_secrets() {
-    # 패턴 목록
-    local patterns=(
-        "password\s*=\s*['\"][^'\"]+['\"]"
-        "api[_-]?key\s*=\s*['\"][^'\"]+['\"]"
-        "secret\s*=\s*['\"][^'\"]+['\"]"
-        "token\s*=\s*['\"][^'\"]+['\"]"
-        "AWS_ACCESS_KEY_ID"
-        "AWS_SECRET_ACCESS_KEY"
-        "PRIVATE_KEY"
-    )
-
-    local staged_files=$(git diff --cached --name-only --diff-filter=ACM)
-
-    if [ -z "$staged_files" ]; then
-        return 0
-    fi
-
-    for pattern in "${patterns[@]}"; do
-        if echo "$staged_files" | xargs grep -l -E -i "$pattern" 2>/dev/null | grep -v ".example" | grep -v ".template"; then
-            echo "Warning: Possible secret found in staged files. Please review before committing."
-            echo "Pattern: $pattern"
-            # exit 1  # Uncomment to block commit
-        fi
-    done
-}
-
 # Uncomment to enable secret scanning
+# check_secrets() {
+#     staged_files=$(git diff --cached --name-only --diff-filter=ACM)
+#     if [ -z "$staged_files" ]; then
+#         return 0
+#     fi
+#     for pattern in \
+#         "password\s*=\s*['\"][^'\"]+['\"]" \
+#         "api[_-]\?key\s*=\s*['\"][^'\"]+['\"]" \
+#         "secret\s*=\s*['\"][^'\"]+['\"]" \
+#         "AWS_ACCESS_KEY_ID" \
+#         "AWS_SECRET_ACCESS_KEY" \
+#         "PRIVATE_KEY"; do
+#         if echo "$staged_files" | xargs grep -l -E -i "$pattern" 2>/dev/null | grep -v ".example" | grep -v ".template"; then
+#             echo "Warning: Possible secret found in staged files."
+#             echo "Pattern: $pattern"
+#             # exit 1  # Uncomment to block commit
+#         fi
+#     done
+# }
 # check_secrets
 
 # 5. 파일 크기 검사
 check_file_size() {
-    local max_size=5000000  # 5MB
-    local staged_files=$(git diff --cached --name-only --diff-filter=ACM)
+    max_size=5000000  # 5MB
+    staged_files=$(git diff --cached --name-only --diff-filter=ACM)
 
     for file in $staged_files; do
         if [ -f "$file" ]; then
-            local size=$(wc -c < "$file")
+            size=$(wc -c < "$file")
             if [ "$size" -gt "$max_size" ]; then
                 echo "Error: File $file is larger than 5MB. Consider using Git LFS."
                 exit 1

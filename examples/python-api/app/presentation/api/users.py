@@ -2,7 +2,11 @@
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
-from app.application.user import UserUseCases
+from app.application.user import (
+    CreateUserInput,
+    UpdateUserInput,
+    UserUseCases,
+)
 from app.domain.user import UserNotFoundError, UserAlreadyExistsError
 from app.presentation.api.deps import get_user_use_cases
 from app.presentation.schemas.user import (
@@ -29,7 +33,13 @@ async def list_users(
     - **offset**: Number of users to skip
     - **status**: Filter by status (active, inactive, suspended)
     """
-    return await use_cases.list_users(limit=limit, offset=offset, status=status)
+    result = await use_cases.list_users(limit=limit, offset=offset, status=status)
+    return UserListResponse(
+        data=[UserResponse(**vars(u)) for u in result.data],
+        total=result.total,
+        limit=result.limit,
+        offset=result.offset,
+    )
 
 
 @router.post("", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
@@ -44,7 +54,10 @@ async def create_user(
     - **name**: User's display name
     """
     try:
-        return await use_cases.create_user(request)
+        result = await use_cases.create_user(
+            CreateUserInput(email=request.email, name=request.name)
+        )
+        return UserResponse(**vars(result))
     except UserAlreadyExistsError as e:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -59,7 +72,8 @@ async def get_user(
 ) -> UserResponse:
     """Get user by ID."""
     try:
-        return await use_cases.get_user(user_id)
+        result = await use_cases.get_user(user_id)
+        return UserResponse(**vars(result))
     except UserNotFoundError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -75,7 +89,11 @@ async def update_user(
 ) -> UserResponse:
     """Update user."""
     try:
-        return await use_cases.update_user(user_id, request)
+        result = await use_cases.update_user(
+            user_id,
+            UpdateUserInput(email=request.email, name=request.name),
+        )
+        return UserResponse(**vars(result))
     except UserNotFoundError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

@@ -36,7 +36,7 @@
 | **Roo Code** | `.roo/rules/*.mdc` | AI 코딩 어시스턴트 |
 
 ### 📚 프롬프트 라이브러리
-15개의 검증된 프롬프트 템플릿 제공:
+14개의 검증된 프롬프트 템플릿 제공:
 - API 설계, 버그 수정, 코드 리뷰
 - 리팩토링, 보안 검토, 성능 분석
 - 테스트 생성, 마이그레이션, 문서화
@@ -126,7 +126,7 @@ vibe-project-template/
 │   ├── context.md                # 프로젝트 컨텍스트
 │   ├── conventions.md            # 코딩 컨벤션
 │   ├── architecture.md           # 아키텍처 설명
-│   ├── prompts/                  # 프롬프트 라이브러리 (15개)
+│   ├── prompts/                  # 프롬프트 라이브러리 (14개)
 │   ├── skills/                   # Agent 스킬 정의
 │   └── subagents/                # 전문 서브에이전트
 │
@@ -203,7 +203,7 @@ vibe-project-template/
 | `security-review.md` | 보안 검토 |
 | `test-generation.md` | 테스트 작성 |
 | `migration.md` | 마이그레이션 |
-| [전체 목록](.agent/prompts/README.md) | 15개 프롬프트 |
+| [전체 목록](.agent/prompts/README.md) | 14개 프롬프트 |
 
 ---
 

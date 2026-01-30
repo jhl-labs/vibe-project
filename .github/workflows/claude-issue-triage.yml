@@ -23,24 +23,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Get issue content
-        id: issue
-        run: |
-          # 이슈 제목과 본문 가져오기
-          TITLE="${{ github.event.issue.title }}"
-          BODY="${{ github.event.issue.body }}"
-
-          echo "title=$TITLE" >> $GITHUB_OUTPUT
-          echo "body<<EOF" >> $GITHUB_OUTPUT
-          echo "$BODY" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
       - name: Analyze issue with Claude
         id: analyze
         if: env.ANTHROPIC_API_KEY != ''
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
+          # 이슈 정보는 환경 변수로 안전하게 전달됨 (shell injection 방지)
           # Claude API를 호출하여 이슈 분석
           # 실제 구현 시 curl 또는 전용 action 사용
 
@@ -50,10 +41,10 @@ jobs:
           3. Components: affected areas (comma-separated)
           4. Summary: one-line summary in Korean
 
-          Issue Title: ${{ steps.issue.outputs.title }}
+          Issue Title: ${ISSUE_TITLE}
 
           Issue Body:
-          ${{ steps.issue.outputs.body }}
+          ${ISSUE_BODY}
 
           Respond in JSON format:
           {

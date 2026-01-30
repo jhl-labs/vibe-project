@@ -1,68 +1,61 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "_comment": "이 파일을 .mcp.json으로 복사하고 프로젝트에 맞게 수정하세요",
   "mcpServers": {
     "filesystem": {
       "_comment": "파일 시스템 접근 - 프로젝트 디렉토리 내 파일 읽기/쓰기",
       "command": "npx",
-      "args": ["-y", "@anthropic-ai/mcp-server-filesystem", "."],
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
       "disabled": false
     },
     "git": {
       "_comment": "Git 작업 - 커밋, 브랜치, 히스토리 조회",
       "command": "npx",
-      "args": ["-y", "@anthropic-ai/mcp-server-git"],
+      "args": ["-y", "@modelcontextprotocol/server-git"],
       "disabled": false
     },
     "github": {
       "_comment": "GitHub API - PR, 이슈, 리뷰 관리",
       "command": "npx",
-      "args": ["-y", "@anthropic-ai/mcp-server-github"],
+      "args": ["-y", "@modelcontextprotocol/server-github"],
       "env": {
         "GITHUB_TOKEN": "${GITHUB_TOKEN}"
       },
       "disabled": true
     },
-    "database-postgres": {
+    "postgres": {
       "_comment": "PostgreSQL 데이터베이스 쿼리",
       "command": "npx",
-      "args": ["-y", "mcp-server-postgres"],
+      "args": ["-y", "@modelcontextprotocol/server-postgres"],
       "env": {
         "DATABASE_URL": "${DATABASE_URL}"
       },
       "disabled": true
     },
-    "database-sqlite": {
+    "sqlite": {
       "_comment": "SQLite 데이터베이스 쿼리",
       "command": "npx",
-      "args": ["-y", "mcp-server-sqlite", "./data/local.db"],
+      "args": ["-y", "@modelcontextprotocol/server-sqlite", "--db-path", "./data/local.db"],
       "disabled": true
     },
     "fetch": {
-      "_comment": "HTTP 요청 - 외부 API 호출",
+      "_comment": "HTTP 요청 - 외부 API 호출, 웹 콘텐츠 가져오기",
       "command": "npx",
-      "args": ["-y", "mcp-server-fetch"],
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
       "disabled": true
     },
-    "browser": {
+    "puppeteer": {
       "_comment": "브라우저 자동화 - 웹 테스트, 스크래핑",
       "command": "npx",
-      "args": ["-y", "mcp-server-puppeteer"],
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
       "disabled": true
     },
     "slack": {
       "_comment": "Slack 연동 - 메시지 전송, 채널 관리",
       "command": "npx",
-      "args": ["-y", "mcp-server-slack"],
+      "args": ["-y", "@modelcontextprotocol/server-slack"],
       "env": {
         "SLACK_BOT_TOKEN": "${SLACK_BOT_TOKEN}"
       },
-      "disabled": true
-    },
-    "custom": {
-      "_comment": "커스텀 MCP 서버",
-      "command": "node",
-      "args": ["./scripts/mcp-server.js"],
       "disabled": true
     }
   }

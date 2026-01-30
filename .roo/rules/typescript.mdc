@@ -1,0 +1,52 @@
+---
+description: TypeScript/JavaScript specific rules
+globs: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
+alwaysApply: false
+---
+
+# TypeScript/JavaScript Rules
+
+## Language Preferences
+
+- Use TypeScript strict mode
+- Prefer `const` over `let`, never use `var`
+- Use arrow functions for callbacks
+- Destructure objects and arrays when appropriate
+- Use template literals for string interpolation
+- Use async/await over .then() chains
+
+## Naming
+
+- Files: `kebab-case.ts`
+- Classes/Components: `PascalCase`
+- Functions/Variables: `camelCase`
+- Constants: `UPPER_SNAKE_CASE`
+- Types/Interfaces: `PascalCase` (no I/T prefix)
+
+## Imports
+
+```typescript
+// Order: external → internal → types
+import { something } from 'external-package';
+import { internal } from '@/internal';
+import type { SomeType } from './types';
+```
+
+## Error Handling
+
+```typescript
+// Always handle promise rejections
+try {
+  await asyncOperation();
+} catch (error) {
+  // Handle or rethrow with context
+  throw new CustomError('Context', { cause: error });
+}
+```
+
+## Testing
+
+- Use Jest/Vitest
+- Test naming: `should_<expected>_when_<condition>`
+- Follow AAA pattern: Arrange, Act, Assert
+- Mock external dependencies

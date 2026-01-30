@@ -25,25 +25,32 @@ typescript-api/
 │   │   └── user/
 │   │       ├── entity.ts
 │   │       ├── repository.ts
-│   │       └── service.ts
+│   │       └── errors.ts
 │   ├── application/      # 유스케이스
 │   │   └── user/
+│   │       ├── dto.ts
 │   │       └── use-cases.ts
 │   ├── infrastructure/   # 외부 연동
-│   │   ├── database/
-│   │   └── http/
+│   │   └── database/
+│   │       ├── prisma.ts
+│   │       └── user-repository.ts
 │   ├── presentation/     # API 레이어
 │   │   ├── routes/
+│   │   │   └── user.routes.ts
 │   │   ├── middleware/
-│   │   └── dto/
+│   │   │   ├── error-handler.ts
+│   │   │   ├── request-logger.ts
+│   │   │   └── validation.ts
+│   │   └── app.ts
 │   └── index.ts
 ├── tests/
-│   ├── unit/
-│   └── integration/
+│   └── unit/
+│       └── domain/
 ├── prisma/
 │   └── schema.prisma
 ├── CLAUDE.md             # 프로젝트별 AI 지시
 ├── package.json
+├── jest.config.js
 ├── tsconfig.json
 └── .env.example
 ```

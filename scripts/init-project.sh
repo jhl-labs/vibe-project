@@ -21,10 +21,12 @@ PROJECT_NAME=""
 ORG_NAME=""
 PROJECT_DESC=""
 AUTHOR_NAME=""
+PRIMARY_LANGUAGE=""
 CURRENT_YEAR=$(date +%Y)
 AI_AGENTS=()
 SELECTED_EXAMPLE=""
 ENABLE_MCP=false
+NON_INTERACTIVE=false
 
 # Functions
 print_header() {
@@ -118,6 +120,27 @@ get_project_info() {
     # Author
     read -p "$(echo -e ${BOLD}Author name${NC}): " AUTHOR_NAME
     [ -z "$AUTHOR_NAME" ] && AUTHOR_NAME="$ORG_NAME"
+
+    # Primary language
+    echo ""
+    echo "Primary language:"
+    echo "  1) TypeScript"
+    echo "  2) Python"
+    echo "  3) Go"
+    echo "  4) Java"
+    echo "  5) Other"
+    read -p "$(echo -e ${BOLD}Select primary language${NC}) [1]: " LANG_CHOICE
+    LANG_CHOICE=${LANG_CHOICE:-1}
+    case $LANG_CHOICE in
+        1) PRIMARY_LANGUAGE="TypeScript" ;;
+        2) PRIMARY_LANGUAGE="Python" ;;
+        3) PRIMARY_LANGUAGE="Go" ;;
+        4) PRIMARY_LANGUAGE="Java" ;;
+        *)
+            read -p "Enter language name: " PRIMARY_LANGUAGE
+            [ -z "$PRIMARY_LANGUAGE" ] && PRIMARY_LANGUAGE="TypeScript"
+            ;;
+    esac
 
     # Summary
     echo ""
@@ -230,6 +253,12 @@ replace_placeholders() {
         -name "*.mdc" \
     \) -not -path "./.git/*" -not -path "./node_modules/*" -not -path "./.venv/*" -not -path "./venv/*")
 
+    # Escape special characters for sed replacement
+    local escaped_desc
+    escaped_desc=$(printf '%s\n' "$PROJECT_DESC" | sed 's/[&/\]/\\&/g')
+    local escaped_author
+    escaped_author=$(printf '%s\n' "$AUTHOR_NAME" | sed 's/[&/\]/\\&/g')
+
     local count=0
     for file in $files_to_process; do
         if [ -f "$file" ]; then
@@ -239,22 +268,30 @@ replace_placeholders() {
                     -e "s/<your-project>/$PROJECT_NAME/g" \
                     -e "s/<your-org>/$ORG_NAME/g" \
                     -e "s/<project-name>/$PROJECT_NAME/g" \
-                    -e "s/<your-name-or-organization>/$AUTHOR_NAME/g" \
+                    -e "s/<your-name-or-organization>/$escaped_author/g" \
+                    -e "s/<your-username>/$ORG_NAME/g" \
                     -e "s/<year>/$CURRENT_YEAR/g" \
                     -e "s/<your-domain>/$ORG_NAME/g" \
                     -e "s/<maintainer-email>/$ORG_NAME@users.noreply.github.com/g" \
-                    -e "s/<project-description>/$PROJECT_DESC/g" \
+                    -e "s/<project-description>/$escaped_desc/g" \
+                    -e "s/<primary-language>/$PRIMARY_LANGUAGE/g" \
+                    -e "s/<project-type>/application/g" \
+                    -e "s/<template-org>/$ORG_NAME/g" \
                     "$file" 2>/dev/null || true
             else
                 sed -i \
                     -e "s/<your-project>/$PROJECT_NAME/g" \
                     -e "s/<your-org>/$ORG_NAME/g" \
                     -e "s/<project-name>/$PROJECT_NAME/g" \
-                    -e "s/<your-name-or-organization>/$AUTHOR_NAME/g" \
+                    -e "s/<your-name-or-organization>/$escaped_author/g" \
+                    -e "s/<your-username>/$ORG_NAME/g" \
                     -e "s/<year>/$CURRENT_YEAR/g" \
                     -e "s/<your-domain>/$ORG_NAME/g" \
                     -e "s/<maintainer-email>/$ORG_NAME@users.noreply.github.com/g" \
-                    -e "s/<project-description>/$PROJECT_DESC/g" \
+                    -e "s/<project-description>/$escaped_desc/g" \
+                    -e "s/<primary-language>/$PRIMARY_LANGUAGE/g" \
+                    -e "s/<project-type>/application/g" \
+                    -e "s/<template-org>/$ORG_NAME/g" \
                     "$file" 2>/dev/null || true
             fi
             ((count++))
@@ -513,20 +550,53 @@ main() {
 }
 
 # Handle arguments
-if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
-    echo "Usage: ./scripts/init-project.sh [options]"
+case "${1:-}" in
+    -h|--help)
+        echo "Usage: ./scripts/init-project.sh [options]"
+        echo ""
+        echo "Options:"
+        echo "  -h, --help             Show this help message"
+        echo "  --non-interactive      Run with defaults or environment variables"
+        echo ""
+        echo "Environment variables (for --non-interactive mode):"
+        echo "  PROJECT_NAME           Project name (required)"
+        echo "  ORG_NAME               GitHub org/username (required)"
+        echo "  PROJECT_DESC           Project description"
+        echo "  AUTHOR_NAME            Author name"
+        echo "  PRIMARY_LANGUAGE       Primary language (TypeScript, Python, etc.)"
+        echo ""
+        echo "This script initializes a new project from the Vibe Project Template."
+        echo "It will:"
+        echo "  - Configure project information"
+        echo "  - Set up AI agent configurations"
+        echo "  - Initialize MCP (optional)"
+        echo "  - Copy example project (optional)"
+        echo "  - Set up git hooks and environment"
+        exit 0
+        ;;
+    --non-interactive)
+        NON_INTERACTIVE=true
+        # Validate required env vars
+        if [ -z "${PROJECT_NAME:-}" ] || [ -z "${ORG_NAME:-}" ]; then
+            print_error "PROJECT_NAME and ORG_NAME environment variables are required for --non-interactive mode"
+            exit 1
+        fi
+        PROJECT_DESC="${PROJECT_DESC:-A project created with Vibe Project Template}"
+        AUTHOR_NAME="${AUTHOR_NAME:-$ORG_NAME}"
+        PRIMARY_LANGUAGE="${PRIMARY_LANGUAGE:-TypeScript}"
+        AI_AGENTS=("claude" "cursor" "roo")
+        ;;
+esac
+
+# Non-interactive mode: skip prompts, run directly
+if [ "$NON_INTERACTIVE" = true ]; then
+    check_git
+    replace_placeholders
+    setup_hooks
+    setup_env
     echo ""
-    echo "Options:"
-    echo "  -h, --help     Show this help message"
-    echo "  --non-interactive  Run with defaults (for CI/CD)"
-    echo ""
-    echo "This script initializes a new project from the Vibe Project Template."
-    echo "It will:"
-    echo "  - Configure project information"
-    echo "  - Set up AI agent configurations"
-    echo "  - Initialize MCP (optional)"
-    echo "  - Copy example project (optional)"
-    echo "  - Set up git hooks and environment"
+    print_success "Project initialized in non-interactive mode"
+    print_info "Project: $PROJECT_NAME | Org: $ORG_NAME | Language: $PRIMARY_LANGUAGE"
     exit 0
 fi
 

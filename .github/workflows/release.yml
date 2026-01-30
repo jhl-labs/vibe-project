@@ -149,8 +149,7 @@ jobs:
 
           gh release create "$VERSION" \
             --title "$VERSION" \
-            --notes "$BODY" \
-            --generate-notes
+            --notes "$BODY"
 
       - name: Dry run summary
         if: github.event.inputs.dry-run == 'true'

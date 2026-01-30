@@ -414,7 +414,20 @@ git push origin hotfix/ISSUE-123-critical-bug
 2. 팀별 요구사항에 맞게 출력 형식 조정
 3. 추가 검사 항목이나 템플릿 추가
 
-## 참고
+## 관련 프롬프트 라이브러리
+
+이 명령어들과 대응하는 상세 프롬프트 템플릿:
+
+| 명령어 | 프롬프트 파일 |
+|--------|-------------|
+| `/review` | [code-review.md](./prompts/code-review.md) |
+| `/test` | [test-generation.md](./prompts/test-generation.md) |
+| `/doc` | [api-docs.md](./prompts/api-docs.md), [readme-gen.md](./prompts/readme-gen.md) |
+| `/refactor` | [refactor.md](./prompts/refactor.md) |
+| `/security` | [security-review.md](./prompts/security-review.md) |
+| `/migrate` | [migration.md](./prompts/migration.md) |
+
+## 관련 스킬
 
 - [Code Review Skill](./skills/code-review.md)
 - [Test Generation Skill](./skills/test-gen.md)

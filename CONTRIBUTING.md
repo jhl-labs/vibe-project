@@ -50,8 +50,10 @@ cd <your-project>
 # 업스트림 추가
 git remote add upstream https://github.com/<your-org>/<your-project>.git
 
-# 의존성 설치
-npm install
+# 의존성 설치 (프로젝트에 맞는 명령어 사용)
+# npm install          # Node.js
+# pip install -r requirements.txt  # Python
+# go mod download      # Go
 ```
 
 #### 2. 브랜치 생성
@@ -77,17 +79,21 @@ git checkout -b fix/your-bug-fix
 - 문서 업데이트 (필요시)
 
 ```bash
-# 개발 서버 실행
-npm run dev
+# 개발 서버 실행 (프로젝트에 맞게 선택)
+# npm run dev                    # Node.js
+# uvicorn app.main:app --reload  # Python (FastAPI)
 
 # 린트 확인
-npm run lint
+# npm run lint       # Node.js
+# ruff check .       # Python
 
 # 테스트 실행
-npm test
+# npm test           # Node.js
+# pytest             # Python
 
 # 타입 체크
-npm run type-check
+# npm run type-check # Node.js (TypeScript)
+# mypy .             # Python
 ```
 
 #### 4. 커밋

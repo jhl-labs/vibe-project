@@ -55,12 +55,12 @@ jobs:
         if: env.ANTHROPIC_API_KEY != ''
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          CHANGED_FILES: ${{ steps.changed.outputs.files }}
+          PR_DIFF: ${{ steps.diff.outputs.diff }}
         run: |
-          # PR 정보 준비
-          PR_TITLE="${{ github.event.pull_request.title }}"
-          PR_BODY="${{ github.event.pull_request.body }}"
-          CHANGED_FILES="${{ steps.changed.outputs.files }}"
-          DIFF="${{ steps.diff.outputs.diff }}"
+          # PR 정보는 환경 변수로 안전하게 전달됨 (shell injection 방지)
 
           # Claude API 호출을 위한 프롬프트
           PROMPT="You are a code reviewer. Review this PR and provide constructive feedback.
@@ -74,7 +74,7 @@ jobs:
           ${CHANGED_FILES}
 
           Diff:
-          ${DIFF}
+          ${PR_DIFF}
 
           Please review and provide:
           1. Summary of changes

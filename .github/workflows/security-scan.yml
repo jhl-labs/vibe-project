@@ -58,7 +58,7 @@ jobs:
 
       # Trivy 의존성 스캔 (범용)
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.28.0
         with:
           scan-type: "fs"
           scan-ref: "."
@@ -148,7 +148,7 @@ jobs:
   #       run: docker build -t app:scan .
   #
   #     - name: Run Trivy container scan
-  #       uses: aquasecurity/trivy-action@master
+  #       uses: aquasecurity/trivy-action@0.28.0
   #       with:
   #         image-ref: "app:scan"
   #         format: "sarif"

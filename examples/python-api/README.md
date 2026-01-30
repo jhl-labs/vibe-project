@@ -24,20 +24,28 @@ python-api/
 │   │   └── user/
 │   │       ├── entity.py
 │   │       ├── repository.py
-│   │       └── service.py
+│   │       └── errors.py
 │   ├── application/      # 유스케이스
 │   │   └── user/
+│   │       ├── dtos.py
 │   │       └── use_cases.py
 │   ├── infrastructure/   # 외부 연동
 │   │   └── database/
+│   │       ├── models.py
+│   │       └── user_repository.py
 │   ├── presentation/     # API 레이어
 │   │   ├── api/
+│   │   │   ├── deps.py
+│   │   │   └── users.py
 │   │   └── schemas/
+│   │       └── user.py
 │   ├── core/             # 설정
+│   │   ├── config.py
+│   │   └── database.py
 │   └── main.py
 ├── tests/
-│   ├── unit/
-│   └── integration/
+│   └── unit/
+│       └── domain/
 ├── CLAUDE.md             # 프로젝트별 AI 지시
 ├── pyproject.toml
 ├── requirements.txt

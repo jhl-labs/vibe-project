@@ -23,21 +23,22 @@
 ### 파일 & 디렉토리
 
 ```
-# 파일명: kebab-case
+# TypeScript/JavaScript: kebab-case
 user-service.ts
-api-client.py
-database-config.js
+api-client.js
+database-config.ts
+
+# Python: snake_case (PEP 8 준수)
+user_service.py
+api_client.py
+database_config.py
 
 # 테스트 파일
-user-service.test.ts
-user-service.spec.ts
-test_user_service.py
+user-service.test.ts       # TS/JS
+user-service.spec.ts       # TS/JS
+test_user_service.py       # Python
 
-# 디렉토리: kebab-case
-src/
-  user-management/
-  api-gateway/
-  data-access/
+# 디렉토리: kebab-case (TS/JS), snake_case (Python)
 ```
 
 ### 코드 요소
@@ -45,7 +46,7 @@ src/
 | 요소 | 규칙 | 예시 |
 |------|------|------|
 | 클래스 | PascalCase | `UserService`, `HttpClient` |
-| 인터페이스 | PascalCase (I prefix 선택) | `IUserRepository`, `UserRepository` |
+| 인터페이스 | PascalCase (I prefix 없이) | `UserRepository`, `UserService` |
 | 타입 | PascalCase | `UserData`, `ApiResponse` |
 | 함수/메서드 | camelCase | `getUserById`, `calculateTotal` |
 | 변수 | camelCase | `userName`, `isActive` |

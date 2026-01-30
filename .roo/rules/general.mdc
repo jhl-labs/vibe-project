@@ -1,6 +1,7 @@
 ---
 description: General coding rules for all files
 globs: ["**/*"]
+alwaysApply: true
 ---
 
 # General Coding Rules

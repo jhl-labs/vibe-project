@@ -4,6 +4,7 @@
 # PR의 변경된 파일에 따라 자동으로 라벨을 추가합니다.
 # 사용: .github/workflows/labeler.yml 워크플로우와 함께 사용
 #
+# 라벨명은 .github/labels.yml과 일치해야 합니다.
 # 자세한 정보: https://github.com/actions/labeler
 
 # 문서 변경
@@ -15,31 +16,32 @@ documentation:
           - "*.md"
 
 # AI Agent 설정
-ai-agent:
+"area: ai-agent":
   - changed-files:
       - any-glob-to-any-file:
           - ".agent/**"
           - "CLAUDE.md"
           - ".cursorrules"
+          - ".cursor/**"
           - ".roo/**"
           - ".mcp.json*"
 
 # CI/CD
-ci-cd:
+"area: ci-cd":
   - changed-files:
       - any-glob-to-any-file:
           - ".github/workflows/**"
           - ".github/actions/**"
 
 # GitHub 설정
-github:
+github-actions:
   - changed-files:
       - any-glob-to-any-file:
           - ".github/**"
           - "!.github/workflows/**"
 
 # 설정 파일
-config:
+chore:
   - changed-files:
       - any-glob-to-any-file:
           - "*.json"
@@ -86,7 +88,7 @@ python:
           - "Pipfile"
 
 # 인프라
-infrastructure:
+"area: infrastructure":
   - changed-files:
       - any-glob-to-any-file:
           - "Dockerfile*"
@@ -97,7 +99,7 @@ infrastructure:
           - "helm/**"
 
 # 보안
-security:
+"area: security":
   - changed-files:
       - any-glob-to-any-file:
           - "SECURITY.md"
@@ -119,22 +121,3 @@ dependencies:
           - "go.sum"
           - "Cargo.toml"
           - "Cargo.lock"
-
-# 예제
-examples:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "examples/**"
-
-# VS Code
-vscode:
-  - changed-files:
-      - any-glob-to-any-file:
-          - ".vscode/**"
-
-# 스크립트
-scripts:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "scripts/**"
-          - "**/*.sh"

@@ -151,7 +151,6 @@ _site/
 *.pyd
 .Python
 pip-wheel-metadata/
-*.so
 .mypy_cache/
 .ruff_cache/
 
@@ -194,3 +193,5 @@ docker-compose.override.yml
 # -----------------
 # .agent/cache/
 # .agent/tmp/
+CLAUDE.local.md
+.mcp.json

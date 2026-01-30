@@ -3,6 +3,7 @@
   // AI Agent Prompts
   // ===================================
   "AI: Claude Instruction": {
+    "scope": "javascript,typescript,python",
     "prefix": "ai-claude",
     "body": [
       "// AI: ${1:instruction}",
@@ -13,6 +14,7 @@
     "description": "AI 지시 주석 추가"
   },
   "AI: TODO for Agent": {
+    "scope": "javascript,typescript,python",
     "prefix": "ai-todo",
     "body": [
       "// TODO(AI): ${1:task description}",
@@ -23,6 +25,7 @@
     "description": "AI Agent를 위한 TODO"
   },
   "AI: Review Request": {
+    "scope": "javascript,typescript,python",
     "prefix": "ai-review",
     "body": [
       "// REVIEW: ${1:What needs review}",
@@ -36,6 +39,7 @@
   // TypeScript Patterns
   // ===================================
   "TS: Clean Architecture Entity": {
+    "scope": "typescript",
     "prefix": "entity",
     "body": [
       "export interface ${1:Entity}Props {",
@@ -68,6 +72,7 @@
     "description": "Clean Architecture Entity"
   },
   "TS: Repository Interface": {
+    "scope": "typescript",
     "prefix": "repository",
     "body": [
       "export interface ${1:Entity}Repository {",
@@ -81,6 +86,7 @@
     "description": "Repository Interface"
   },
   "TS: Use Case": {
+    "scope": "typescript",
     "prefix": "usecase",
     "body": [
       "export interface ${1:UseCaseName}Input {",
@@ -104,6 +110,7 @@
     "description": "Use Case Pattern"
   },
   "TS: Error Class": {
+    "scope": "typescript",
     "prefix": "error-class",
     "body": [
       "export class ${1:ErrorName}Error extends Error {",
@@ -120,6 +127,7 @@
   // Python Patterns
   // ===================================
   "PY: Clean Architecture Entity": {
+    "scope": "python",
     "prefix": "py-entity",
     "body": [
       "from dataclasses import dataclass, field",
@@ -146,6 +154,7 @@
     "description": "Python Entity with dataclass"
   },
   "PY: Repository Protocol": {
+    "scope": "python",
     "prefix": "py-repository",
     "body": [
       "from typing import Protocol",
@@ -175,6 +184,7 @@
     "description": "Python Repository Protocol"
   },
   "PY: Use Case": {
+    "scope": "python",
     "prefix": "py-usecase",
     "body": [
       "from dataclasses import dataclass",
@@ -207,6 +217,7 @@
     "description": "Python Use Case Pattern"
   },
   "PY: FastAPI Router": {
+    "scope": "python",
     "prefix": "py-router",
     "body": [
       "from fastapi import APIRouter, Depends, HTTPException, status",
@@ -238,6 +249,7 @@
   // Test Patterns
   // ===================================
   "TS: Jest Test Suite": {
+    "scope": "typescript,javascript",
     "prefix": "test-suite",
     "body": [
       "describe('${1:Subject}', () => {",
@@ -262,6 +274,7 @@
     "description": "Jest Test Suite"
   },
   "PY: Pytest Test": {
+    "scope": "python",
     "prefix": "py-test",
     "body": [
       "import pytest",
@@ -288,6 +301,7 @@
   // Documentation
   // ===================================
   "MD: ADR Template": {
+    "scope": "markdown",
     "prefix": "adr",
     "body": [
       "# ADR-${1:number}: ${2:Title}",
@@ -313,6 +327,7 @@
     "description": "Architecture Decision Record"
   },
   "MD: API Endpoint Doc": {
+    "scope": "markdown",
     "prefix": "api-doc",
     "body": [
       "### ${1:Endpoint Name}",

@@ -1,10 +1,15 @@
 """User Entity - Domain model."""
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Self
 from uuid import uuid4
+
+
+def _utcnow() -> datetime:
+    """Return current UTC time as timezone-aware datetime."""
+    return datetime.now(timezone.utc)
 
 
 class UserStatus(str, Enum):
@@ -27,13 +32,13 @@ class User:
     email: str
     name: str
     status: UserStatus = UserStatus.ACTIVE
-    created_at: datetime = field(default_factory=datetime.utcnow)
-    updated_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=_utcnow)
+    updated_at: datetime = field(default_factory=_utcnow)
 
     @classmethod
     def create(cls, email: str, name: str) -> Self:
         """Create a new user."""
-        now = datetime.utcnow()
+        now = _utcnow()
         return cls(
             id=str(uuid4()),
             email=email,
@@ -56,7 +61,7 @@ class User:
             name=name if name is not None else self.name,
             status=self.status,
             created_at=self.created_at,
-            updated_at=datetime.utcnow(),
+            updated_at=_utcnow(),
         )
 
     def deactivate(self) -> Self:
@@ -69,7 +74,7 @@ class User:
             name=self.name,
             status=UserStatus.INACTIVE,
             created_at=self.created_at,
-            updated_at=datetime.utcnow(),
+            updated_at=_utcnow(),
         )
 
     def activate(self) -> Self:
@@ -82,5 +87,5 @@ class User:
             name=self.name,
             status=UserStatus.ACTIVE,
             created_at=self.created_at,
-            updated_at=datetime.utcnow(),
+            updated_at=_utcnow(),
         )

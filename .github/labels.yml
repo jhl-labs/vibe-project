@@ -171,6 +171,17 @@
   description: "No recent activity"
 
 # ===================
+# Operations Labels (운영)
+# ===================
+- name: incident
+  color: "b60205"
+  description: "Production incident"
+
+- name: rollback
+  color: "d93f0b"
+  description: "Deployment rollback"
+
+# ===================
 # AI Related (AI 관련)
 # ===================
 - name: "ai: assisted"
