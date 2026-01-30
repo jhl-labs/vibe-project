@@ -3,7 +3,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Self
 from uuid import uuid4
 
 
@@ -36,7 +35,7 @@ class User:
     updated_at: datetime = field(default_factory=_utcnow)
 
     @classmethod
-    def create(cls, email: str, name: str) -> Self:
+    def create(cls, email: str, name: str) -> "User":
         """Create a new user."""
         now = _utcnow()
         return cls(
@@ -53,7 +52,7 @@ class User:
         """Check if user is active."""
         return self.status == UserStatus.ACTIVE
 
-    def update(self, email: str | None = None, name: str | None = None) -> Self:
+    def update(self, email: str | None = None, name: str | None = None) -> "User":
         """Update user information."""
         return User(
             id=self.id,
@@ -64,7 +63,7 @@ class User:
             updated_at=_utcnow(),
         )
 
-    def deactivate(self) -> Self:
+    def deactivate(self) -> "User":
         """Deactivate user."""
         if self.status == UserStatus.INACTIVE:
             raise ValueError("User is already inactive")
@@ -77,7 +76,7 @@ class User:
             updated_at=_utcnow(),
         )
 
-    def activate(self) -> Self:
+    def activate(self) -> "User":
         """Activate user."""
         if self.status == UserStatus.ACTIVE:
             raise ValueError("User is already active")

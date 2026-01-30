@@ -17,7 +17,8 @@ Model Context Protocol(MCP)은 AI 모델에게 외부 도구와 컨텍스트를 
 
 ### Claude Desktop 설정
 
-`~/.config/claude/claude_desktop_config.json` (Linux/Mac)
+`~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
+`~/.config/claude/claude_desktop_config.json` (Linux)
 `%APPDATA%\Claude\claude_desktop_config.json` (Windows)
 
 ```json
@@ -25,15 +26,15 @@ Model Context Protocol(MCP)은 AI 모델에게 외부 도구와 컨텍스트를 
   "mcpServers": {
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@anthropic-ai/mcp-server-filesystem", "/path/to/project"]
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/project"]
     },
     "git": {
       "command": "npx",
-      "args": ["-y", "@anthropic-ai/mcp-server-git"]
+      "args": ["-y", "@modelcontextprotocol/server-git"]
     },
     "github": {
       "command": "npx",
-      "args": ["-y", "@anthropic-ai/mcp-server-github"],
+      "args": ["-y", "@modelcontextprotocol/server-github"],
       "env": {
         "GITHUB_TOKEN": "your-github-token"
       }
@@ -70,9 +71,9 @@ Model Context Protocol(MCP)은 AI 모델에게 외부 도구와 컨텍스트를 
 
 | 서버 | 설명 | 용도 |
 |------|------|------|
-| @anthropic-ai/mcp-server-filesystem | 파일 시스템 접근 | 파일 읽기/쓰기 |
-| @anthropic-ai/mcp-server-git | Git 작업 | 버전 관리 |
-| @anthropic-ai/mcp-server-github | GitHub API | PR, 이슈 관리 |
+| @modelcontextprotocol/server-filesystem | 파일 시스템 접근 | 파일 읽기/쓰기 |
+| @modelcontextprotocol/server-git | Git 작업 | 버전 관리 |
+| @modelcontextprotocol/server-github | GitHub API | PR, 이슈 관리 |
 | mcp-server-postgres | PostgreSQL | DB 쿼리 |
 | mcp-server-sqlite | SQLite | 로컬 DB |
 
@@ -93,11 +94,11 @@ Model Context Protocol(MCP)은 AI 모델에게 외부 도구와 컨텍스트를 
   "mcpServers": {
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@anthropic-ai/mcp-server-filesystem", "."]
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."]
     },
     "git": {
       "command": "npx",
-      "args": ["-y", "@anthropic-ai/mcp-server-git"]
+      "args": ["-y", "@modelcontextprotocol/server-git"]
     },
     "browser": {
       "command": "npx",
@@ -114,7 +115,7 @@ Model Context Protocol(MCP)은 AI 모델에게 외부 도구와 컨텍스트를 
   "mcpServers": {
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@anthropic-ai/mcp-server-filesystem", "."]
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."]
     },
     "database": {
       "command": "npx",
@@ -138,7 +139,7 @@ Model Context Protocol(MCP)은 AI 모델에게 외부 도구와 컨텍스트를 
   "mcpServers": {
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@anthropic-ai/mcp-server-filesystem", "./data"]
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "./data"]
     },
     "jupyter": {
       "command": "python",
@@ -253,7 +254,7 @@ if __name__ == "__main__":
       "command": "npx",
       "args": [
         "-y",
-        "@anthropic-ai/mcp-server-filesystem",
+        "@modelcontextprotocol/server-filesystem",
         "--read-only",
         "./src"
       ]
@@ -293,7 +294,7 @@ if __name__ == "__main__":
 1. 명령어 경로 확인
 ```bash
 which npx
-npx -y @anthropic-ai/mcp-server-filesystem --help
+npx -y @modelcontextprotocol/server-filesystem --help
 ```
 
 2. 로그 확인

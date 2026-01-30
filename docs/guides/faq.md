@@ -63,6 +63,7 @@
 ├── architecture.md  # 아키텍처 설명
 ├── guidelines.md    # AI 사용 가이드라인
 ├── commands.md      # Slash commands 가이드
+├── prompts/         # 재사용 가능한 프롬프트 템플릿
 ├── skills/          # 재사용 가능한 AI 작업 패턴
 │   ├── code-review.md
 │   ├── test-gen.md
