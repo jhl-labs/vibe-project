@@ -23,8 +23,8 @@ class UserModel(Base):
     name: Mapped[str] = mapped_column(String(100))
     status: Mapped[str] = mapped_column(String(20), default="active")
     created_at: Mapped[datetime] = mapped_column(
-        DateTime, default=_utcnow
+        DateTime(timezone=True), default=_utcnow
     )
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime, default=_utcnow, onupdate=_utcnow
+        DateTime(timezone=True), default=_utcnow, onupdate=_utcnow
     )
