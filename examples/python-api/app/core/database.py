@@ -36,7 +36,4 @@ async def create_tables() -> None:
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
     """Get database session."""
     async with async_session_maker() as session:
-        try:
-            yield session
-        finally:
-            await session.close()
+        yield session

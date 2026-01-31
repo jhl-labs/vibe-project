@@ -84,7 +84,7 @@ class SQLAlchemyUserRepository(IUserRepository):
         """Delete user."""
         model = await self._session.get(UserModel, user_id)
         if model:
-            await self._session.delete(model)
+            self._session.delete(model)
             await self._session.commit()
 
     async def count(self, status: str | None = None) -> int:

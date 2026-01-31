@@ -55,7 +55,9 @@ yarn install
 ### 3. 환경 변수 설정
 
 ```bash
-# 환경 변수 템플릿 복사
+# 환경 변수 템플릿 복사 (예제 프로젝트 참조)
+# TypeScript: examples/typescript-api/.env.example
+# Python: examples/python-api/.env.example
 cp .env.example .env
 
 # .env 파일 편집
@@ -214,7 +216,8 @@ npm install
 
 ```bash
 # 사용 중인 포트 확인
-lsof -i :3000
+lsof -i :3000          # macOS / Linux (lsof 설치 필요)
+ss -tlnp | grep :3000  # Linux 대안
 
 # 다른 포트로 실행
 PORT=3001 npm run dev

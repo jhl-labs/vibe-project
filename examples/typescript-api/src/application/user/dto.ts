@@ -39,6 +39,11 @@ export const listUsersQuerySchema = z.object({
 
 export type ListUsersQuery = z.infer<typeof listUsersQuerySchema>;
 
+// ID Params
+export const idParamsSchema = z.object({
+  id: z.string().uuid('Invalid ID format'),
+});
+
 // List Users Response
 export interface ListUsersResponse {
   data: UserResponse[];

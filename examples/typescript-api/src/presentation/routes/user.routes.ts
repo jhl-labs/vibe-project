@@ -4,11 +4,12 @@ import {
   createUserSchema,
   updateUserSchema,
   listUsersQuerySchema,
+  idParamsSchema,
   ListUsersQuery,
 } from '../../application/user/dto';
 import { PrismaUserRepository } from '../../infrastructure/database/user-repository';
 import { prisma } from '../../infrastructure/database/prisma';
-import { validateBody, validateQuery } from '../middleware/validation';
+import { validateBody, validateQuery, validateParams } from '../middleware/validation';
 
 const router = Router();
 
@@ -55,7 +56,7 @@ router.post(
  * GET /api/users/:id
  * 사용자 상세 조회
  */
-router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/:id', validateParams(idParamsSchema), async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = await userUseCases.getUser(req.params.id);
     res.json({ data: user });
@@ -70,6 +71,7 @@ router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
  */
 router.put(
   '/:id',
+  validateParams(idParamsSchema),
   validateBody(updateUserSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -85,7 +87,7 @@ router.put(
  * DELETE /api/users/:id
  * 사용자 삭제
  */
-router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+router.delete('/:id', validateParams(idParamsSchema), async (req: Request, res: Response, next: NextFunction) => {
   try {
     await userUseCases.deleteUser(req.params.id);
     res.status(204).send();

@@ -95,7 +95,8 @@ jobs:
           echo "## PR Metrics" >> $GITHUB_STEP_SUMMARY
 
           # 지난 주 PR 수
-          PR_COUNT=$(gh pr list --state merged --search "merged:>=$(date -d '7 days ago' +%Y-%m-%d)" | wc -l)
+          # Linux: date -d, macOS: date -v (또는 brew install coreutils → gdate -d)
+          PR_COUNT=$(gh pr list --state merged --search "merged:>=$(date -d '7 days ago' +%Y-%m-%d 2>/dev/null || date -v-7d +%Y-%m-%d)" | wc -l)
           echo "Merged PRs (last 7 days): $PR_COUNT" >> $GITHUB_STEP_SUMMARY
 
           # 평균 PR 크기

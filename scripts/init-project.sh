@@ -25,6 +25,7 @@ PRIMARY_LANGUAGE=""
 CURRENT_YEAR=$(date +%Y)
 AI_AGENTS=()
 SELECTED_EXAMPLE=""
+COPY_EXAMPLE=""
 ENABLE_MCP=false
 NON_INTERACTIVE=false
 
@@ -53,18 +54,6 @@ print_info() {
 
 print_step() {
     echo -e "${BOLD}→ $1${NC}"
-}
-
-# Progress indicator
-show_progress() {
-    local duration=$1
-    local message=$2
-    echo -ne "${CYAN}$message${NC}"
-    for ((i=0; i<duration; i++)); do
-        echo -n "."
-        sleep 0.2
-    done
-    echo ""
 }
 
 # Check if running in a git repository
@@ -236,23 +225,6 @@ replace_placeholders() {
 
     print_step "Replacing placeholders..."
 
-    # Find and replace in all relevant files
-    local files_to_process=$(find . -type f \( \
-        -name "*.md" -o \
-        -name "*.yml" -o \
-        -name "*.yaml" -o \
-        -name "*.json" -o \
-        -name "*.ts" -o \
-        -name "*.js" -o \
-        -name "*.py" -o \
-        -name "*.sh" -o \
-        -name "*.toml" -o \
-        -name "LICENSE" -o \
-        -name "CODEOWNERS" -o \
-        -name ".cursorrules" -o \
-        -name "*.mdc" \
-    \) -not -path "./.git/*" -not -path "./node_modules/*" -not -path "./.venv/*" -not -path "./venv/*")
-
     # Escape special characters for sed replacement
     local escaped_desc
     escaped_desc=$(printf '%s\n' "$PROJECT_DESC" | sed 's/[&/\]/\\&/g')
@@ -260,7 +232,8 @@ replace_placeholders() {
     escaped_author=$(printf '%s\n' "$AUTHOR_NAME" | sed 's/[&/\]/\\&/g')
 
     local count=0
-    for file in $files_to_process; do
+    # Find and replace in all relevant files (safe handling of filenames with spaces)
+    while IFS= read -r file; do
         if [ -f "$file" ]; then
             # Replace placeholders (macOS/Linux compatible)
             if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -275,7 +248,6 @@ replace_placeholders() {
                     -e "s/<maintainer-email>/$ORG_NAME@users.noreply.github.com/g" \
                     -e "s/<project-description>/$escaped_desc/g" \
                     -e "s/<primary-language>/$PRIMARY_LANGUAGE/g" \
-                    -e "s/<project-type>/application/g" \
                     -e "s/<template-org>/$ORG_NAME/g" \
                     "$file" 2>/dev/null || true
             else
@@ -290,13 +262,26 @@ replace_placeholders() {
                     -e "s/<maintainer-email>/$ORG_NAME@users.noreply.github.com/g" \
                     -e "s/<project-description>/$escaped_desc/g" \
                     -e "s/<primary-language>/$PRIMARY_LANGUAGE/g" \
-                    -e "s/<project-type>/application/g" \
                     -e "s/<template-org>/$ORG_NAME/g" \
                     "$file" 2>/dev/null || true
             fi
             ((count++))
         fi
-    done
+    done < <(find . -type f \( \
+        -name "*.md" -o \
+        -name "*.yml" -o \
+        -name "*.yaml" -o \
+        -name "*.json" -o \
+        -name "*.ts" -o \
+        -name "*.js" -o \
+        -name "*.py" -o \
+        -name "*.sh" -o \
+        -name "*.toml" -o \
+        -name "LICENSE" -o \
+        -name "CODEOWNERS" -o \
+        -name ".cursorrules" -o \
+        -name "*.mdc" \
+    \) -not -path "./.git/*" -not -path "./node_modules/*" -not -path "./.venv/*" -not -path "./venv/*")
 
     print_success "Processed $count files"
 }
@@ -541,10 +526,10 @@ main() {
     configure_ai_agents
     setup_mcp
     setup_example_project
-    setup_hooks
     setup_env
-    cleanup_template
     init_dependencies
+    setup_hooks
+    cleanup_template
 
     show_next_steps
 }
@@ -592,11 +577,12 @@ esac
 if [ "$NON_INTERACTIVE" = true ]; then
     check_git
     replace_placeholders
-    setup_hooks
     setup_env
+    setup_hooks
     echo ""
     print_success "Project initialized in non-interactive mode"
     print_info "Project: $PROJECT_NAME | Org: $ORG_NAME | Language: $PRIMARY_LANGUAGE"
+    print_info "To complete setup, manually run: configure AI agents, select example project, cleanup template files"
     exit 0
 fi
 

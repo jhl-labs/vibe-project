@@ -6,7 +6,7 @@
 
 ### 기본 정보
 
-- **프로젝트명**: `<your-project-name>`
+- **프로젝트명**: `<project-name>`
 - **버전**: `0.1.0`
 - **상태**: Development
 - **팀**: `<your-team-name>`
