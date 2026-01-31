@@ -4,6 +4,7 @@ import {
   createUserSchema,
   updateUserSchema,
   listUsersQuerySchema,
+  ListUsersQuery,
 } from '../../application/user/dto';
 import { PrismaUserRepository } from '../../infrastructure/database/user-repository';
 import { prisma } from '../../infrastructure/database/prisma';
@@ -24,7 +25,7 @@ router.get(
   validateQuery(listUsersQuerySchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const query = req.query as any;
+      const query = req.query as unknown as ListUsersQuery;
       const result = await userUseCases.listUsers(query);
       res.json(result);
     } catch (error) {

@@ -21,6 +21,7 @@ export function validateBody(schema: ZodSchema) {
 export function validateQuery(schema: ZodSchema) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
+      // as any: Express ParsedQs 타입과 Zod 반환 타입 불일치로 불가피
       req.query = schema.parse(req.query) as any;
       next();
     } catch (error) {
@@ -35,6 +36,7 @@ export function validateQuery(schema: ZodSchema) {
 export function validateParams(schema: ZodSchema) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
+      // as any: Express ParamsDictionary 타입과 Zod 반환 타입 불일치로 불가피
       req.params = schema.parse(req.params) as any;
       next();
     } catch (error) {
