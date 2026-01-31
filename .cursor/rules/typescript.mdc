@@ -8,6 +8,8 @@ alwaysApply: false
 
 ## Language Preferences
 
+- Maximum line length: 100 characters
+- Indentation: 2 spaces
 - Use TypeScript strict mode
 - Prefer `const` over `let`, never use `var`
 - Use arrow functions for callbacks

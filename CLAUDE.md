@@ -43,14 +43,15 @@ src/
 ## 코딩 규칙
 
 ### 네이밍
-- 파일: `kebab-case` (TS/JS: `.ts`, Python: `snake_case.py`)
+- 파일: `kebab-case.ts` (TS/JS), `snake_case.py` (Python)
 - 클래스: `PascalCase`
-- 함수/변수: `camelCase`
+- 함수/변수: `camelCase` (TS/JS), `snake_case` (Python)
 - 상수: `UPPER_SNAKE_CASE`
 
 ### 스타일
-- 들여쓰기: 2 spaces
+- 들여쓰기: 2 spaces (TS/JS), 4 spaces (Python, PEP 8)
 - 최대 줄 길이: 100자
+- 함수 최대 길이: 30줄
 - Conventional Commits 사용
 
 ### 아키텍처 원칙
