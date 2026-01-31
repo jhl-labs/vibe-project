@@ -26,6 +26,9 @@ AI Agent와의 효과적인 협업을 위한 프롬프트 템플릿 모음입니
 - [security-review.md](./security-review.md) - 보안 검토
 - [performance-review.md](./performance-review.md) - 성능 검토
 
+### 테스트 (Testing)
+- [test-generation.md](./test-generation.md) - 테스트 코드 생성
+
 ### 마이그레이션 (Migration)
 - [migration.md](./migration.md) - 코드/데이터 마이그레이션
 - [upgrade-dependency.md](./upgrade-dependency.md) - 의존성 업그레이드
