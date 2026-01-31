@@ -44,10 +44,10 @@ footer = """
 trim = true
 
 # 빈 릴리스 출력 여부
-postprocessors = [
-    { pattern = '<your-org>', replace = "your-org" },
-    { pattern = '<your-project>', replace = "your-project" },
-]
+# postprocessors: GitHub 연동 활성화 시 필요에 따라 설정
+# postprocessors = [
+#     { pattern = 'pattern', replace = "replacement" },
+# ]
 
 [git]
 # Conventional Commits 파싱
