@@ -14,7 +14,12 @@ export function errorHandler(
   res: Response,
   next: NextFunction
 ): void {
-  console.error('Error:', error);
+  // Production: log message only, Development: log full error
+  if (process.env.NODE_ENV === 'production') {
+    console.error('Error:', error.message);
+  } else {
+    console.error('Error:', error);
+  }
 
   // Zod Validation Error
   if (error instanceof ZodError) {
