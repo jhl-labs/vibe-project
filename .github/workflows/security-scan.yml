@@ -129,7 +129,7 @@ jobs:
 
       # TruffleHog 시크릿 스캔 (선택)
       # - name: Run TruffleHog
-      #   uses: trufflesecurity/trufflehog@main
+      #   uses: trufflesecurity/trufflehog@v3.82.13
       #   with:
       #     extra_args: --only-verified
       #   continue-on-error: true

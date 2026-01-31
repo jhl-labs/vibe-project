@@ -174,8 +174,8 @@ version = "0.1.0"
 requires-python = ">=3.11"
 
 [tool.ruff]
-line-length = 88
-select = ["E", "F", "I", "N", "W"]
+line-length = 100
+select = ["E", "F", "I", "N", "W", "UP", "B", "C4"]
 
 [tool.mypy]
 python_version = "3.11"

@@ -8,26 +8,26 @@
 ## 프로젝트 개요
 
 - **이름**: `<project-name>`
-- **설명**: `<프로젝트 목적과 주요 기능>`
-- **기술 스택**: `<언어, 프레임워크, DB, 인프라>`
+- **설명**: `<project-description>`
+- **기술 스택**: `<primary-language>`
 
 ## 빠른 명령어
 
 ```bash
-# 의존성 설치
-<패키지매니저> install
+# 의존성 설치 (Dependencies)
+# npm install / pip install -r requirements.txt / go mod download
 
-# 개발 서버
-<실행 명령어>
+# 개발 서버 (Dev server)
+# npm run dev / uvicorn app.main:app --reload / go run cmd/main.go
 
-# 테스트
-<테스트 명령어>
+# 테스트 (Test)
+# npm test / pytest / go test ./...
 
-# 빌드
-<빌드 명령어>
+# 빌드 (Build)
+# npm run build / python -m build / go build ./...
 
-# 린트
-<린트 명령어>
+# 린트 (Lint)
+# npm run lint / ruff check . / golangci-lint run
 ```
 
 ## 프로젝트 구조

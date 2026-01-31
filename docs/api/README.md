@@ -10,8 +10,7 @@
 
 ```
 docs/api/
-├── README.md           # 이 파일
-└── README.md           # 이 파일 (API 개요, 인증, 에러 코드 포함)
+└── README.md           # API 개요, 인증, 에러 코드
 # 프로젝트 확장 시 아래 파일 추가 가능:
 # ├── authentication.md   # 인증 가이드
 # ├── errors.md           # 에러 코드 정의
